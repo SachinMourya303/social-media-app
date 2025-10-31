@@ -1,10 +1,10 @@
-import SideBar from '@/app/components/SideBar'
 import UserDetails from '@/app/popups/UserDetails'
 import React from 'react'
-import ChatPage from '@/app/components/ChatPage'
 import { Outlet } from 'react-router-dom'
 import Navbar from '@/app/components/Navbar'
 import { useSelector } from 'react-redux'
+import SideBar from '@/app/components/Sidebar/SideBar'
+import ChatPage from '@/app/components/ChatPage/ChatPage'
 
 const Layout = () => {
   const { userDetails , darkmode } = useSelector(state => state.userAuth);
