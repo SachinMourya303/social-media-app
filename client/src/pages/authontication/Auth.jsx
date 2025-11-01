@@ -86,16 +86,16 @@ const Auth = () => {
                         {state !== "login" && (
                             <div className="flex items-center mt-6 w-full bg-white/80 border border-gray-300 h-12 rounded-full overflow-hidden px-4 gap-2">
                                 <User className='text-gray-500 size-5' />
-                                <Input type="text" name="name" placeholder="Name" className="border-none outline-none ring-0! bg-transparent rounded-full" value={authData.name} onChange={handleChange} disabled={state === "login"} required={state !== "login"} />
+                                <Input type="text" name="name" placeholder="Name" className="border-none outline-none ring-0! bg-transparent rounded-full shadow-none" value={authData.name} onChange={handleChange} disabled={state === "login"} required={state !== "login"} />
                             </div>
                         )}
                         <div className="flex items-center w-full mt-4 bg-white/80 border border-gray-300 h-12 rounded-full overflow-hidden px-4 gap-2">
                             <Mail className='text-gray-500 size-5' />
-                            <Input type="email" name="email" placeholder="Email id" className="border-none outline-none ring-0! bg-transparent rounded-full" value={authData.email} onChange={handleChange} required />
+                            <Input type="email" name="email" placeholder="Email id" className="border-none outline-none ring-0! bg-transparent rounded-full shadow-none" value={authData.email} onChange={handleChange} required />
                         </div>
                         <div className="flex items-center mt-4 w-full bg-white/80 border border-gray-300 h-12 rounded-full overflow-hidden px-4 gap-2">
                             <Lock className='text-gray-500 size-5' />
-                            <Input type="password" name="password" placeholder="Password" className="border-none outline-none ring-0! bg-transparent rounded-full" value={authData.password} onChange={handleChange} required />
+                            <Input type="password" name="password" placeholder="Password" className="border-none outline-none ring-0! bg-transparent rounded-full shadow-none" value={authData.password} onChange={handleChange} required />
                         </div>
                         <Button type="submit" className="mt-15 w-full h-11 rounded-full text-white bg-black hover:bg-black/80 transition-opacity cursor-pointer">
                             {isPending ? (

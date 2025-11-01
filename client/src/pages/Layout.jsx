@@ -14,9 +14,9 @@ const Layout = () => {
         <Navbar />
       </div>
       <div className='grid grid-cols-1  md:grid-cols-[0.7fr_2fr_1fr]'>
-        {/* <SideBar />
+        <SideBar />
         <Outlet />
-        <ChatPage /> */}
+        <ChatPage />
       </div>
     </div>
   )
