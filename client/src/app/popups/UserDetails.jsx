@@ -28,7 +28,7 @@ const UserDetails = () => {
     const [userProfile, setUserProfile] = useState(null);
     const [userData, setUserData] = useState({
         userName: "",
-        bio: "",
+        bio: "Hey!, I'm using Twitbook",
     })
 
     const handleChange = (e) => {
@@ -101,10 +101,10 @@ const UserDetails = () => {
                     <form onSubmit={onSubmit} className='mt-15'>
                         <div className="flex items-center w-full my-4 bg-white/80 border border-gray-300 h-12 rounded-full overflow-hidden px-4 gap-2">
                             <User className='text-gray-500 size-5' />
-                            <Input onChange={handleChange} type="name" name='userName' placeholder="Username" value={userData.userName} className="border-none outline-none ring-0! bg-transparent rounded-full" required />
+                            <Input onChange={handleChange} type="name" name='userName' placeholder="Username" value={userData.userName} className="border-none outline-none ring-0! bg-transparent rounded-full shadow-none" required />
                         </div>
                         <div className="mb-5">
-                            <textarea rows={6} onChange={handleChange} type="text" name='bio' placeholder="Enter bio" value={userData.bio} className="w-full my-4 bg-white/80 border border-gray-300 rounded-xl overflow-hidden px-4 py-2" />
+                            <textarea rows={6} onChange={handleChange} name='bio' placeholder="Enter bio" value={userData.bio} className="w-full my-4 bg-white/80 border border-gray-300 rounded-xl overflow-hidden px-4 py-2" />
                         </div>
 
                         <button
