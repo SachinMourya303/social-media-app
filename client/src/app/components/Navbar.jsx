@@ -13,25 +13,25 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [dropDownIsOpen, setDropDownIsOpen] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [active , setActive] = useState('Home');  
 
   const menuList = [
-    { title: 'Home' , clickFunction: () => {navigate('/'); setActive('Home')} , icon: <Home className='size-7 text-gray-500 group-hover:text-app-theme'/> },
-    { title: 'Theme' , clickFunction: () => {dispatch(setDarkMode(true)); setActive('Theme')} , icon: <BiSolidBrightnessHalf className='size-7 text-gray-500 group-hover:text-app-theme'/> },
-    { title: 'Message' , clickFunction: () => {navigate('/'); setActive('Message')} , icon: <MessageCircleMore className='size-7 text-gray-500 group-hover:text-app-theme'/> },
-    { title: 'Notification' , clickFunction: () => {navigate('/'); setActive('Notification')} , icon: <Bell className='size-7 text-gray-500 group-hover:text-app-theme'/> }
+    { title: 'Home' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Home')} , icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
+    { title: 'Theme' , clickFunction: () => {dispatch(setDarkMode(true)); setMenu(false) ; setActive('Theme')} , icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
+    { title: 'Message' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Message')} , icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
+    { title: 'Notification' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Notification')} , icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> }
   ]
   return (
     <div>
       <div className={darkmode ? 'bg-darkmode-theme' : 'bg-white'}>
         {/* Desktop view */}
         <div className='grid grid-cols-[0.5fr_1fr] md:grid-cols-[0.5fr_1fr_1fr_1fr_0fr] items-center px-5 py-3'>
-          <strong id='website-name' className={darkmode ? 'text-gray-100 text-2xl' : 'text-2xl'}>TwitBook</strong>
+          <strong id='website-name' className={darkmode ? 'text-app-theme text-2xl' : 'text-2xl'}>TwitBook</strong>
 
           <div className={`hidden md:flex gap-2 items-center px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
             <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
-            <Input className={`w-full border-0 ring-0! outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search' />
+            <Input className={`w-full border-0 ring-0! outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search friends' />
           </div>
 
           <div className='hidden md:flex items-center gap-2'>
@@ -92,7 +92,7 @@ const Navbar = () => {
             </div>
 
             <div>
-              <Menu onClick={() => setDropDownIsOpen(!dropDownIsOpen)} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+              <Menu onClick={() => setMenu(!menu)} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
             </div>
           </div>
         </div>
@@ -100,12 +100,12 @@ const Navbar = () => {
 
       {/* Mobile view */}
 
-     { dropDownIsOpen
+     { menu
      ? (
        <div className='flex md:hidden'>
-        <div className='absolute p-5 top-0 bg-white w-[75%] h-screen shadow-lg transition-all'>
+        <div className={`absolute p-5 top-0 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} w-[75%] h-screen shadow-lg transition-all`}>
 
-        <div onClick={() => setDropDownIsOpen(!dropDownIsOpen)} className='flex justify-end items-center'><X /></div>
+        <div onClick={() => setMenu(!menu)} className='flex justify-end items-center'><X /></div>
 
         <div className='flex items-center gap-2 my-5'>
           <figure>
@@ -141,7 +141,7 @@ const Navbar = () => {
             menuList.map((menu , index) => (
               <div onClick={menu.clickFunction} key={index} className={`flex gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
                  <div >{menu.icon}</div>
-                 <div className='text-gray-500 group-hover:text-app-theme'>{menu.title}</div>
+                 <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
               </div>
             ))
           }
