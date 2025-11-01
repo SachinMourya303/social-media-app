@@ -1,44 +1,118 @@
 import { Input } from '@/components/ui/input'
 import { BiSolidBrightnessHalf } from "react-icons/bi";
-import { Bell, CircleUser, Home, MessageCircleMore, Search, } from 'lucide-react'
-import React from 'react'
+import { Bell, ChevronDown, CircleUser, Home, LogOutIcon, Menu, MessageCircleMore, Moon, Search, Sun, X, } from 'lucide-react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 
 const Navbar = () => {
-  const { userDetails , darkmode } = useSelector(state => state.userAuth);
+  const { userDetails, darkmode } = useSelector(state => state.userAuth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [dropDownIsOpen, setDropDownIsOpen] = useState(false);
+  const [active , setActive] = useState('Home');  
+
+  const menuList = [
+    { title: 'Home' , clickFunction: () => {navigate('/'); setActive('Home')} , icon: <Home className='size-7 text-gray-500 group-hover:text-app-theme'/> },
+    { title: 'Theme' , clickFunction: () => {dispatch(setDarkMode(true)); setActive('Theme')} , icon: <BiSolidBrightnessHalf className='size-7 text-gray-500 group-hover:text-app-theme'/> },
+    { title: 'Message' , clickFunction: () => {navigate('/'); setActive('Message')} , icon: <MessageCircleMore className='size-7 text-gray-500 group-hover:text-app-theme'/> },
+    { title: 'Notification' , clickFunction: () => {navigate('/'); setActive('Notification')} , icon: <Bell className='size-7 text-gray-500 group-hover:text-app-theme'/> }
+  ]
   return (
-    <div className={darkmode ? 'bg-darkmode-theme' : 'bg-white'}>
-      <div className='grid grid-cols-[0.5fr_1fr_1fr_1fr] items-center px-5 py-3'>
-        <strong id='website-name' className={darkmode ? 'text-gray-100 text-2xl' : 'text-2xl'}>TwitBook</strong>
+    <div>
+      <div className={darkmode ? 'bg-darkmode-theme' : 'bg-white'}>
+        {/* Desktop view */}
+        <div className='grid grid-cols-[0.5fr_1fr] md:grid-cols-[0.5fr_1fr_1fr_1fr_0fr] items-center px-5 py-3'>
+          <strong id='website-name' className={darkmode ? 'text-gray-100 text-2xl' : 'text-2xl'}>TwitBook</strong>
 
-        <div className={`flex gap-2 items-center px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100' } rounded-full w-[80%]`}>
-          <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
-          <Input className={`w-full border-0 ring-0! outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search' />
-        </div>
+          <div className={`hidden md:flex gap-2 items-center px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
+            <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
+            <Input className={`w-full border-0 ring-0! outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search' />
+          </div>
 
-        <div className='flex items-center gap-2'>
-          <Link to='/' className='flex gap-2 bg-app-theme/10 p-2 rounded-lg'>
-            <Home className='text-app-theme cursor-pointer' />
-            <span className='text-app-theme cursor-pointer'>Home</span>
-          </Link>
+          <div className='hidden md:flex items-center gap-2'>
+            <Link to='/' className='flex gap-2 bg-app-theme/10 p-2 rounded-lg'>
+              <Home className='text-app-theme cursor-pointer' />
+              <span className='text-app-theme cursor-pointer'>Home</span>
+            </Link>
 
-          <div className='flex items-center w-full justify-around'>
-            <BiSolidBrightnessHalf onClick={() => dispatch(setDarkMode(true))} className={`text-3xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
-            <MessageCircleMore className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
-            <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+            <div className='flex items-center w-full justify-around'>
+              <BiSolidBrightnessHalf onClick={() => dispatch(setDarkMode(true))} className={`text-3xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+              <div className='relative'>
+                <MessageCircleMore className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+              </div>
+
+              <div className='relative'>
+                <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+              </div>
+            </div>
+          </div>
+
+          <div className='hidden md:flex items-center justify-end gap-2'>
+            <figure>
+              {userDetails?.users?.profile !== null
+                ? (
+                  <div onClick={() => dispatch(logOut())}>
+                    {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
+                  </div>
+                )
+                : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
+              }
+            </figure>
+
+            <figcaption>
+              {userDetails?.users?.username !== ""
+                ? (
+                  <span className={`text-xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>{userDetails?.users?.username}</span>
+                )
+                : (
+                  <span>No User found</span>
+                )
+              }
+            </figcaption>
+          </div>
+
+          <div className='flex md:hidden items-center gap-3'>
+            <div className='flex items-center w-full justify-end gap-3'>
+              <div className='relative'>
+                <MessageCircleMore className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+              </div>
+
+              <div className='relative'>
+                <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+              </div>
+            </div>
+
+            <div>
+              <Menu onClick={() => setDropDownIsOpen(!dropDownIsOpen)} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className='flex items-center justify-end gap-2'>
+      {/* Mobile view */}
+
+     { dropDownIsOpen
+     ? (
+       <div className='flex md:hidden'>
+        <div className='absolute p-5 top-0 bg-white w-[75%] h-screen shadow-lg transition-all'>
+
+        <div onClick={() => setDropDownIsOpen(!dropDownIsOpen)} className='flex justify-end items-center'><X /></div>
+
+        <div className='flex items-center gap-2 my-5'>
           <figure>
             {userDetails?.users?.profile !== null
               ? (
                 <div onClick={() => dispatch(logOut())}>
-                  {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
+                  {<img src={userDetails?.users?.profile} alt="profile" className='w-15 h-15 rounded-lg hover:ring-4 hover:ring-app-theme cursor-pointer' />}
                 </div>
               )
               : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
@@ -48,7 +122,10 @@ const Navbar = () => {
           <figcaption>
             {userDetails?.users?.username !== ""
               ? (
-                <span className={`text-xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>{userDetails?.users?.username}</span>
+                <div className='flex flex-col'>
+                  <span className={`text-xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>{userDetails?.users?.username}</span>
+                  <span className={`text-xs ${darkmode ? 'text-darkmode-text' : 'text-gray-300'}`}>{userDetails?.users?.email}</span>
+                </div>
               )
               : (
                 <span>No User found</span>
@@ -56,9 +133,33 @@ const Navbar = () => {
             }
           </figcaption>
         </div>
+
+        <hr />
+
+        <div className='mt-10'>
+          {
+            menuList.map((menu , index) => (
+              <div onClick={menu.clickFunction} key={index} className={`flex gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
+                 <div >{menu.icon}</div>
+                 <div className='text-gray-500 group-hover:text-app-theme'>{menu.title}</div>
+              </div>
+            ))
+          }
+        </div>
+        
+
+        <Button onClick={() => dispatch(logOut())} className='bg-red-500 w-[90%] mx-5 flex items-center gap-3 absolute left-0 bottom-5 hover:bg-red-500/80 cursor-pointer'>
+          <span>Logout</span>
+          <LogOutIcon />
+        </Button>
+
       </div>
+       </div>
+     ) : (
+      ""
+     )}
     </div>
-  )
+    )
 }
 
 export default Navbar

@@ -1,4 +1,5 @@
 import React from 'react'
+import Profile from './utils/Profile'
 
 const SideBar = () => {
   return (
@@ -7,7 +8,7 @@ const SideBar = () => {
 
     <div>
         <div>
-            sidebar
+            <Profile />
         </div>
     </div>
   )
