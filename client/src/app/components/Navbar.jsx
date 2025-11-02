@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { BiSolidBrightnessHalf } from "react-icons/bi";
-import { Bell, ChevronDown, CircleUser, Home, LogOutIcon, Menu, MessageCircleMore, Moon, Search, Sun, X, } from 'lucide-react'
+import { Bell, ChevronDown, CircleUser, Home, LogOutIcon, Menu, MessageCircleMore, Moon, Search, SearchIcon, Sun, X, } from 'lucide-react'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
@@ -18,6 +18,7 @@ const Navbar = () => {
 
   const menuList = [
     { title: 'Home' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Home')} , icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
+    { title: 'Search' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Search')} , icon: <SearchIcon  className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
     { title: 'Theme' , clickFunction: () => {dispatch(setDarkMode(true)); setMenu(false) ; setActive('Theme')} , icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
     { title: 'Message' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Message')} , icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> },
     { title: 'Notification' , clickFunction: () => {navigate('/'); setMenu(false) ; setActive('Notification')} , icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}/> }
@@ -59,7 +60,7 @@ const Navbar = () => {
               {userDetails?.users?.profile !== null
                 ? (
                   <div onClick={() => dispatch(logOut())}>
-                    {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
+                    {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 object-cover object-center rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
                   </div>
                 )
                 : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
@@ -112,7 +113,7 @@ const Navbar = () => {
             {userDetails?.users?.profile !== null
               ? (
                 <div onClick={() => dispatch(logOut())}>
-                  {<img src={userDetails?.users?.profile} alt="profile" className='w-15 h-15 rounded-lg hover:ring-4 hover:ring-app-theme cursor-pointer' />}
+                  {<img src={userDetails?.users?.profile} alt="profile" className='w-15 h-15 object-cover object-center rounded-lg hover:ring-4 hover:ring-app-theme cursor-pointer' />}
                 </div>
               )
               : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
@@ -139,7 +140,7 @@ const Navbar = () => {
         <div className='mt-10'>
           {
             menuList.map((menu , index) => (
-              <div onClick={menu.clickFunction} key={index} className={`flex gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
+              <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
                  <div >{menu.icon}</div>
                  <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
               </div>
