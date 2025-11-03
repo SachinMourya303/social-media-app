@@ -2,14 +2,14 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { useSelector } from 'react-redux';
 
-const CardWrapper = ({ children }) => {
+const FeedsCardWrapper = ({ children }) => {
   const { darkmode } = useSelector(state => state.userAuth);
 
   return (
-    <div className={`hidden xl:flex flex-col items-center justify-center pt-5 p-5 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} m-5 rounded-lg`}>
+    <div className={`flex pt-5 p-5 w-full ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} rounded-lg`}>
         {children}
     </div>
   );
 };
 
-export default CardWrapper;
+export default FeedsCardWrapper;

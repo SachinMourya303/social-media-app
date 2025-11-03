@@ -24,7 +24,6 @@ const SideBar = () => {
 
   useEffect(() => {
     if (data?.users) {
-          console.log(data?.users);
       dispatch(setUsers(data.users));
     }
   }, [data, dispatch]);

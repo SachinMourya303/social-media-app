@@ -13,7 +13,7 @@ const Layout = () => {
       <div>
         <Navbar />
       </div>
-      <div className='grid grid-cols-1  md:grid-cols-[0.7fr_2fr_1fr]'>
+      <div className='grid grid-cols-1 md:grid-cols-[0fr_2fr_1fr]  xl:grid-cols-[0.7fr_2fr_1fr]'>
         <SideBar />
         <Outlet />
         <ChatPage />
