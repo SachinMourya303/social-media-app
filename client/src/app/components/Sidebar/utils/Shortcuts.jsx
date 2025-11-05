@@ -1,5 +1,5 @@
 import CardWrapper from '@/app/ReusableComponents/CardWrapper';
-import { setUsers } from '@/app/stateManagement/slice/usersSlice';
+import { setFollowing } from '@/app/stateManagement/slice/usersSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -8,7 +8,8 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Shortcuts = () => {
     const { userToken, darkmode } = useSelector(state => state.userAuth);
-    const users = useSelector(state => state.users.usersData);
+    
+    const followingUsers = useSelector(state => state.users.following);
 
     return (
         <CardWrapper >
@@ -17,7 +18,7 @@ const Shortcuts = () => {
                 <hr className={`mt-3 ${darkmode ? 'border-t border-darkmode-text/50' : 'border-t border-gray-200'}`} />
                 <ScrollArea className='h-60 w-full cursor-pointer'>
                     <div className='flex flex-col items-start justify-start w-full'>
-                        {users.filter((user) => user.email !== userToken.users.email).map((user, index) => (
+                        {followingUsers.map((user, index) => (
                             <div key={index} className='flex items-center justify-center gap-5 mt-3'>
 
                                 <figure className='w-12 h-12 rounded-full overflow-hidden'>
