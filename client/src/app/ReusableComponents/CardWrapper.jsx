@@ -6,7 +6,7 @@ const CardWrapper = ({ children }) => {
   const { darkmode } = useSelector(state => state.userAuth);
 
   return (
-    <div className={`hidden xl:flex flex-col items-center justify-center pt-5 p-5 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} m-5 rounded-lg`}>
+    <div className={`hidden xl:flex flex-col pt-5 p-5 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} m-5 rounded-lg`}>
         {children}
     </div>
   );

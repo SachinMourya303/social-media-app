@@ -1,29 +1,75 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Toaster } from 'react-hot-toast';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 import Auth from './pages/authontication/Auth';
 import Layout from './pages/Layout';
 import UserDetails from './app/popups/UserDetails';
 import FeedsPage from './pages/FeedsPage';
+import StoryPage from './pages/StoryPage';
+
+import { setFollowing, setIsLoading, setUsers } from './app/stateManagement/slice/usersSlice';
 
 const App = () => {
+  const dispatch = useDispatch();
   const { userToken, userDetails } = useSelector((state) => state.userAuth);
+  const users = useSelector((state) => state.users.usersData);
+  
+
+  const { data, isPending } = useQuery({
+    queryKey: ['users'],
+    queryFn: async () => {
+      const res = await axios.get(`${import.meta.env.VITE_API_URI}/users/user-details`);
+      return res.data;
+    },
+    staleTime: 1000 * 60 * 1,
+    cacheTime: 1000 * 60 * 5,
+    refetchOnWindowFocus: false,
+  });
+
+  const accountHolder = users.find(
+    (user) => user.email === userToken?.users?.email
+  );
+
+  useEffect(() => {
+    if (data?.users) {
+      dispatch(setUsers(data.users));
+    }
+    dispatch(setIsLoading(isPending));
+  }, [data, isPending, dispatch]);
+
+  useEffect(() => {
+    if (accountHolder && users.length > 0) {
+      const following = users.filter((user) =>
+        accountHolder.following?.some((f) => f.email === user.email)
+      );
+      dispatch(setFollowing(following));
+    }
+  }, [accountHolder, users, dispatch]);
 
   return (
     <>
       <Toaster />
       <Routes>
-        <Route path="/login" element={userToken === "" ? <Auth /> : <Navigate to="/user-details" />}/>
-        <Route path="/user-details" element={userDetails === "" ? <UserDetails /> : <Navigate to="/" />}
+        <Route
+          path="/login"
+          element={userToken === '' ? <Auth /> : <Navigate to="/user-details" />}
         />
-
-        <Route path="/" element={userDetails === "" ? <Navigate to="/login" /> : <Layout />}>
+        <Route
+          path="/user-details"
+          element={userDetails === '' ? <UserDetails /> : <Navigate to="/" />}
+        />
+        <Route
+          path="/"
+          element={userDetails === '' ? <Navigate to="/login" /> : <Layout />}
+        >
           <Route index element={<FeedsPage />} />
         </Route>
+        <Route path="/stories/:storyId" element={<StoryPage />} />
       </Routes>
-
     </>
   );
 };

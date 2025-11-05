@@ -5,6 +5,8 @@ import background2 from './images/Group Chat-bro.svg'
 import background3 from './images/Social life-bro.svg'
 import background4 from './images/Mobile login-bro.svg'
 import dummyUserIcon from './images/dummyUser.png'
+import blackVideoImageIcon from './images/black-video-image-icon.png'
+import whiteVideoImageIcon from './images/white-video-image-icon.png'
 
 export const websiteLogo = {
     logo,
@@ -13,5 +15,7 @@ export const websiteLogo = {
     background2,
     background3,
     background4,
-    dummyUserIcon
+    dummyUserIcon,
+    blackVideoImageIcon,
+    whiteVideoImageIcon
 }

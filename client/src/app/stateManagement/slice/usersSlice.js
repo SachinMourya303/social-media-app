@@ -1,7 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    usersData : [],
+    usersData : [],  // followers
+    isLoading : [],
+    followers : [],
+    following : [],
+    userStoryId : null,
 }
 
 const userSlice = createSlice({
@@ -10,9 +14,21 @@ const userSlice = createSlice({
     reducers: {
         setUsers : (state , action) => {
             state.usersData = action.payload;
-        }
+        },
+        setIsLoading : (state , action) => {
+            state.isLoading = action.payload;
+        },
+        setFollowers : (state , action) => {
+            state.followers = action.payload;
+        },
+        setFollowing : (state , action) => {
+            state.following = action.payload;
+        },
+        setUserStoryId : (state , action) => {
+            state.userStoryId = action.payload;
+        },
     }
 })
 
-export const { setUsers } = userSlice.actions;
+export const { setUsers , setIsLoading , setFollowers , setFollowing , setUserStoryId} = userSlice.actions;
 export default userSlice.reducer;
