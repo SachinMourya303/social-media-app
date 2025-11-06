@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 
 const Navbar = () => {
@@ -24,6 +25,23 @@ const Navbar = () => {
     { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message') }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification') }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
   ]
+
+  const isLoading = useSelector(state => state.users.isLoading);
+
+  if (isLoading) return <div className='flex items-center justify-between gap-5 px-5 py-3'>
+    <Skeleton className='h-10 w-50 hidden md:flex' />
+    <Skeleton className='h-10 w-100 hidden md:flex' />
+    <div className='flex justify-evenly items-center w-100'>
+      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
+      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
+      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
+      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
+      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
+    </div>
+
+    <Skeleton className='h-10 w-50 hidden md:flex' />
+
+  </div>
   return (
     <div>
       <div className={darkmode ? 'bg-darkmode-theme' : 'bg-white'}>
