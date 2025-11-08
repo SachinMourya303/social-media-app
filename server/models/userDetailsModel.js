@@ -9,6 +9,7 @@ const userDetailsSchema = new mongoose.Schema({
 
     storyFile: {
         url: { type: String, default: null },
+        caption: { type: String, default: null },
         type: { type: String, enum: ['image', 'video'], default: null },
         createdAt: { type: Date, default: Date.now },
     },

@@ -5,11 +5,20 @@ import Navbar from '@/app/components/Navbar'
 import { useSelector } from 'react-redux'
 import SideBar from '@/app/components/Sidebar/SideBar'
 import ChatPage from '@/app/components/ChatPage/ChatPage'
+import PopupWrapper from '@/app/ReusableComponents/PopupWrapper'
+import SearchTab from '@/app/popups/SearchTab'
+import StoryTab from '@/app/popups/StoryTab'
 
 const Layout = () => {
   const { userDetails , darkmode } = useSelector(state => state.userAuth);
   return (
     <div className={darkmode ? 'bg-darkmode h-screen' : 'bg-gray-50 h-screen'}>
+      <div>
+        <PopupWrapper >
+          <SearchTab />
+          <StoryTab />
+        </PopupWrapper>
+      </div>
       <div>
         <Navbar />
       </div>

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
-    usersData : [],  // followers
+    usersData : [],
     isLoading : [],
+    Posts : [],
     followers : [],
     following : [],
-    userStoryId : null,
 }
 
 const userSlice = createSlice({
@@ -18,14 +18,14 @@ const userSlice = createSlice({
         setIsLoading : (state , action) => {
             state.isLoading = action.payload;
         },
+        setPosts : (state , action) => {
+            state.Posts = action.payload;
+        },
         setFollowers : (state , action) => {
             state.followers = action.payload;
         },
         setFollowing : (state , action) => {
             state.following = action.payload;
-        },
-        setUserStoryId : (state , action) => {
-            state.userStoryId = action.payload;
         },
     }
 })

@@ -43,8 +43,7 @@ userDetailsRoutes.get('/user-details', async (req, res) => {
 });
 
 userDetailsRoutes.put('/upload/story/:userId',
-  upload.single('file'),
-  async (req, res) => {
+  upload.single('file'), async (req, res) => {
     try {
       const { userId } = req.params;
 
@@ -52,24 +51,28 @@ userDetailsRoutes.put('/upload/story/:userId',
         return res.status(400).json({ message: 'No file uploaded' });
       }
 
-      const fileType = req.file.mimetype.startsWith('video') ? 'video' : 'image';
+      const fileType = req.file.mimetype?.startsWith('video') ? 'video' : 'image';
+      const caption = typeof req.body.caption === 'string' ? req.body.caption : null;
 
       const updatedUser = await userDetailsModel.findByIdAndUpdate(
         userId,
         {
-          storyFile: {
-            url: req.file.path,
-            type: fileType,
-            createdAt: new Date(),
-          },
+          $set: {
+            'storyFile.url': req.file.path,
+            'storyFile.caption': caption || null,
+            'storyFile.type': fileType,
+            'storyFile.createdAt': new Date(),
+          }
         },
-        { new: true }
+        { new: true, runValidators: true }
       );
+
 
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
       }
-
+       
+      console.log('Story File being sent:', updatedUser.storyFile);
       return res.status(200).json({
         message: 'Story uploaded successfully',
         storyFile: updatedUser.storyFile,
