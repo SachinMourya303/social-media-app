@@ -9,6 +9,8 @@ const searchTap = () => {
   const users = useSelector((state) => state.users.usersData);
   const [userName, setUserName] = useState("");
   const [searchedUser, setSearchedUser] = useState([]);
+  console.log(searchedUser);
+  
 
   const onSearchInput = (e) => {
     const value = e.target.value;

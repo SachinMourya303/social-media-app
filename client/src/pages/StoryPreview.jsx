@@ -11,15 +11,15 @@ const StoryPreview = () => {
 
   const { storyId } = useParams();
 
-   useEffect(() => {
-  const hasReloaded = sessionStorage.getItem('hasReloaded');
-  if (!hasReloaded) {
-    sessionStorage.setItem('hasReloaded', 'true');
-    window.location.reload();
-  } else {
-    sessionStorage.removeItem('hasReloaded');
-  }
-}, []);
+//    useEffect(() => {
+//   const hasReloaded = sessionStorage.getItem('hasReloaded');
+//   if (!hasReloaded) {
+//     sessionStorage.setItem('hasReloaded', 'true');
+//     window.location.reload();
+//   } else {
+//     sessionStorage.removeItem('hasReloaded');
+//   }
+// }, []);
 
 
   const findUser = users.find((user) => user._id === storyId);
@@ -27,12 +27,12 @@ const StoryPreview = () => {
   
   
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     navigate('/');
-  //   }, 15000);
-  //   return () => clearTimeout(timer);
-  // }, [navigate]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/');
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   return (
     <div className=' w-full flex justify-center items-center h-screen bg-black'>
