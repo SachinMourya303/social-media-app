@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
-
 const Navbar = () => {
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
   const dispatch = useDispatch();
@@ -31,7 +30,7 @@ const Navbar = () => {
 
   if (isLoading) return <div className='flex items-center justify-between gap-5 px-5 py-3'>
     <Skeleton className='h-10 w-50' />
-    <Skeleton className='h-10 w-100 hidden md:flex' />
+    <Skeleton className='h-10 w-50 hidden md:flex' />
     <div className='flex justify-evenly items-center w-100'>
       <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
       <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
