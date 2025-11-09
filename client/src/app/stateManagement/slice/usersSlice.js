@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit"
 const initialState = {
     usersData : [],
     isLoading : [],
+    loggedUser : null,
     Posts : [],
     followers : [],
     following : [],
@@ -18,6 +19,9 @@ const userSlice = createSlice({
         setIsLoading : (state , action) => {
             state.isLoading = action.payload;
         },
+        setLoggedUser : (state , action) => {
+            state.loggedUser = action.payload;
+        },
         setPosts : (state , action) => {
             state.Posts = action.payload;
         },
@@ -30,5 +34,5 @@ const userSlice = createSlice({
     }
 })
 
-export const { setUsers , setIsLoading , setFollowers , setFollowing , setUserStoryId} = userSlice.actions;
+export const { setUsers , setLoggedUser , setIsLoading , setFollowers , setFollowing , setUserStoryId} = userSlice.actions;
 export default userSlice.reducer;
