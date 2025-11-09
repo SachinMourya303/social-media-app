@@ -86,38 +86,27 @@ userDetailsRoutes.put('/upload/story/:userId',
 
 userDetailsRoutes.put('/following', async (req, res) => {
   try {
-    const { senderId, receverId } = req.body;
+    const { senderId, receiverId } = req.body;
 
     const sender = await userDetailsModel.findById(senderId);
-    const receiver = await userDetailsModel.findById(receverId);
-
-    // if (!sender || !receiver) {
-    //   return res.status(404).json({ message: 'User not found' });
-    // }
-
-    // const alreadyFollowing = sender.following.some(
-    //   (f) => f.userId.toString() === receverId
-    // );
-    // if (alreadyFollowing) {
-    //   return res.status(400).json({ message: 'Already following this user' });
-    // }
+    const receiver = await userDetailsModel.findById(receiverId);
 
     sender.following.push({
       userId: receiver._id,
       email: receiver.email,
-      connection: true,
+      connection: false,
     });
 
     receiver.followers.push({
       userId: sender._id,
       email: sender.email,
-      connection: true,
+      connection: false,
     });
 
     await sender.save();
     await receiver.save();
 
-    return res.status(200).json({ message: 'Follow successful' });
+    return res.status(200).json({ message: 'Followed' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
