@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from 'primereact/skeleton';
 import { setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
 
@@ -20,7 +20,7 @@ const Navbar = () => {
 
   const menuList = [
     { title: 'Home', clickFunction: () => { navigate('/'); setMenu(false); setActive('Home') }, icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Search', clickFunction: () => { navigate('/'); setMenu(false); setActive('Search') }, icon: <SearchIcon className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
+    { title: 'Search', clickFunction: () => { navigate('/'); setMenu(false); setActive('Search'); dispatch(setSearchDialogBox(true)) }, icon: <SearchIcon className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Create', clickFunction: () => { navigate('/'); setMenu(false); setActive('Create') }, icon: <CircleFadingPlus className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Theme', clickFunction: () => { dispatch(setDarkMode(true)); setMenu(false); setActive('Theme') }, icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message') }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
@@ -30,17 +30,17 @@ const Navbar = () => {
   const isLoading = useSelector(state => state.users.isLoading);
 
   if (isLoading) return <div className='flex items-center justify-between gap-5 px-5 py-3'>
-    <Skeleton className='h-10 w-50' />
-    <Skeleton className='h-10 w-100 hidden md:flex' />
+    <Skeleton className='h-10! w-50!' />
+    <Skeleton className='h-10! w-100! hidden md:flex' />
     <div className='flex justify-evenly items-center w-100'>
-      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
-      <Skeleton className='h-10 w-10 rounded-full hidden md:flex' />
-      <Skeleton className='h-10 w-10 rounded-full' />
-      <Skeleton className='h-10 w-10 rounded-full' />
-      <Skeleton className='h-10 w-10 rounded-full' />
+      <Skeleton className='h-10! w-10! rounded-full! hidden md:flex' />
+      <Skeleton className='h-10! w-10! rounded-full! hidden md:flex' />
+      <Skeleton className='h-10! w-10! rounded-full!' />
+      <Skeleton className='h-10! w-10! rounded-full!' />
+      <Skeleton className='h-10! w-10! rounded-full!' />
     </div>
 
-    <Skeleton className='h-10 w-50 hidden md:flex' />
+    <Skeleton className='h-10! w-50! hidden md:flex' />
 
   </div>
   return (
@@ -50,7 +50,7 @@ const Navbar = () => {
         <div className='grid grid-cols-[0.5fr_1fr] md:grid-cols-[0.5fr_1fr_1fr_1fr_0fr] items-center px-5 py-3'>
           <strong id='website-name' className={darkmode ? 'text-app-theme text-2xl' : 'text-2xl'}>TwitBook</strong>
 
-          <div onClick={() => dispatch(setSearchDialogBox())} className={`hidden md:flex gap-2 items-center cursor-text px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
+          <div onClick={() => dispatch(setSearchDialogBox(true))} className={`hidden md:flex gap-2 items-center cursor-text px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
             <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
             <Input className={`w-full border-0 ring-0! shadow-none outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search friends' disabled/>
           </div>
