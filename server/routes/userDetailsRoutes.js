@@ -106,7 +106,6 @@ userDetailsRoutes.put('/following', async (req, res) => {
 
     const sender = await userDetailsModel.findById(senderId);
     const receiver = await userDetailsModel.findById(receiverId);
-
     sender.following.push({
       userId: receiver._id,
       email: receiver.email,
