@@ -34,6 +34,17 @@ const StoryPreview = () => {
     }
   }
 
+  const deleteStory = async (id) => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_API_URI}/users/delete/story/${id}`);
+      if (response.ok) {
+        navigate('/');
+      }
+    } catch (error) {
+      toast.error(error.message || 'Something went wrong');
+    }
+  }
+
   return (
     <div className=' w-full flex justify-center items-center h-screen bg-black'>
       <div className='w-[50%] md:h-full w-full flex justify-center items-start md:pt-0 md:items-center overflow-hidden'>
