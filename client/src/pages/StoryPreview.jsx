@@ -16,12 +16,12 @@ const StoryPreview = () => {
 
   const findUser = users.find((user) => user._id === storyId);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     navigate('/');
-  //   }, 15000);
-  //   return () => clearTimeout(timer);
-  // }, [navigate]);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/');
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   const deleteStory = async (id) => {
     try {
