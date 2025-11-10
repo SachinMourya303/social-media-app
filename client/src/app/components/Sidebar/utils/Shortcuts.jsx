@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 const Shortcuts = () => {
-    const { userToken, darkmode } = useSelector(state => state.userAuth);
-    
-    const followingUsers = useSelector(state => state.users.following);
+      const { userDetails, darkmode } = useSelector(state => state.userAuth);
+    const navigate = useNavigate();
+    const followers = useSelector((state) => state.users.followers);
 
     return (
         <CardWrapper >
@@ -18,8 +19,8 @@ const Shortcuts = () => {
                 <hr className={`mt-3 ${darkmode ? 'border-t border-darkmode-text/50' : 'border-t border-gray-200'}`} />
                 <ScrollArea className='h-60 w-full cursor-pointer'>
                     <div className='flex flex-col items-start justify-start w-full'>
-                        {followingUsers.map((user, index) => (
-                            <div key={index} className='flex items-center justify-center gap-5 mt-3'>
+                        {followers.map((user, index) => (
+                            <div onClick={() => navigate(`/user/profile/${user?._id}`)} key={index} className='flex items-center justify-center gap-5 mt-3'>
 
                                 <figure className='w-12 h-12 rounded-full overflow-hidden'>
                                     {user?.profile !== null
