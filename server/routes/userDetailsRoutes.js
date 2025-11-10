@@ -87,22 +87,13 @@ userDetailsRoutes.put('/upload/story/:userId',
 userDetailsRoutes.put('/delete/story/:storyId', async (req, res) => {
   try {
     const { storyId } = req.params;
+    const user = await userDetailsModel.findById(storyId);
+    if (!user) return res.status(404).json({ message: 'Story not found' });
 
-    const userStoryToDelete = await userDetailsModel.findById(storyId);
-    if (!userStoryToDelete) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
+    user.storyFile = null;
 
-    userStoryToDelete.storyFile.push({
-      caption: null,
-      createdAt: null,
-      type: null,
-      url: null,
-    });
-
-    await userStoryToDelete.save();
-
-    return res.status(200).json({ message: 'Story deleted successfully', deletedStory });
+    const saved = await user.save();
+    return res.status(200).json({ message: 'Story deleted successfully', user: saved });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
