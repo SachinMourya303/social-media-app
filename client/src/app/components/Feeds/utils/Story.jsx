@@ -5,7 +5,7 @@ import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { PlusCircle } from 'lucide-react';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,11 +20,15 @@ const Story = () => {
   const navigate = useNavigate();
   const users = useSelector(state => state.users.usersData);
   
+  const [uploadedStory , setUploadedStory] = useState(null);
 
-  const storyPreview = () => {
+  useEffect(() => {
     const findUser = users.find((user) => user._id === userDetails?.users._id);
-    
-    if (findUser?.storyFile?.url !== null) {
+    setUploadedStory(findUser);
+  } , []);
+
+  const storyPreview = () => {    
+    if (uploadedStory?.storyFile?.url !== null) {
       navigate(`/stories/${userDetails?.users._id}`)
     } else {
       toast('No story added!');
@@ -40,7 +44,7 @@ const Story = () => {
 
               <div className='group'>
                 <div className='relative flex flex-col items-center justify-center gap-2'>
-                  <figure className={`w-15 h-15 rounded-full overflow-hidden cursor-pointer  ${userDetails?.users.storyFile.url !== null ? 'border-4 border-app-theme/50' : ''}`}>
+                  <figure className={`w-15 h-15 rounded-full overflow-hidden cursor-pointer  ${uploadedStory?.storyFile?.url !== null ? 'border-4 border-app-theme/50' : ''}`}>
                     {userDetails?.users.profile !== null
                       ? (
                         <img src={userDetails?.users.profile} alt="profile" className='w-full h-full object-cover object-center' />
@@ -50,7 +54,7 @@ const Story = () => {
                       )
                     }
                   </figure>
-                  <figcaption className={`absolute bottom-5 right-0 bg-black/60 rounded-full text-app-theme cursor-pointer ${userDetails?.users.storyFile.url !== null ? 'hidden' : 'flex'}`}><PlusCircle /></figcaption>
+                  <figcaption className={`absolute bottom-5 right-0 bg-black/60 rounded-full text-app-theme cursor-pointer ${uploadedStory?.storyFile?.url !== null ? 'hidden' : 'flex'}`}><PlusCircle /></figcaption>
                   <figcaption className={`text-xs ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Your Story</figcaption>
                 </div>
 
