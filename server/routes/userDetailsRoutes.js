@@ -43,8 +43,7 @@ userDetailsRoutes.get('/user-details', async (req, res) => {
 });
 
 userDetailsRoutes.put('/upload/story/:userId',
-  upload.single('file'),
-  async (req, res) => {
+  upload.single('file'), async (req, res) => {
     try {
       const { userId } = req.params;
 
@@ -52,18 +51,20 @@ userDetailsRoutes.put('/upload/story/:userId',
         return res.status(400).json({ message: 'No file uploaded' });
       }
 
-      const fileType = req.file.mimetype.startsWith('video') ? 'video' : 'image';
+      const fileType = req.file.mimetype?.startsWith('video') ? 'video' : 'image';
+      const caption = typeof req.body.caption === 'string' ? req.body.caption : null;
 
       const updatedUser = await userDetailsModel.findByIdAndUpdate(
         userId,
         {
-          storyFile: {
-            url: req.file.path,
-            type: fileType,
-            createdAt: new Date(),
-          },
+          $set: {
+            'storyFile.url': req.file.path,
+            'storyFile.caption': caption || null,
+            'storyFile.type': fileType,
+            'storyFile.createdAt': new Date(),
+          }
         },
-        { new: true }
+        { new: true, runValidators: true }
       );
 
       if (!updatedUser) {
@@ -81,40 +82,44 @@ userDetailsRoutes.put('/upload/story/:userId',
   }
 );
 
+userDetailsRoutes.delete('/delete/story/:storyId', async (req, res) => {
+  try {
+    const { storyId } = req.params;
+
+    const deletedStory = await userDetailsModel.findByIdAndDelete(storyId);
+    if (!deletedStory) {
+      return res.status(404).json({ message: 'Story not found' });
+    }
+
+    return res.status(200).json({ message: 'Story deleted successfully', deletedStory });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
+
 userDetailsRoutes.put('/following', async (req, res) => {
   try {
-    const { senderId, receverId } = req.body;
+    const { senderId, receiverId } = req.body;
 
     const sender = await userDetailsModel.findById(senderId);
-    const receiver = await userDetailsModel.findById(receverId);
-
-    // if (!sender || !receiver) {
-    //   return res.status(404).json({ message: 'User not found' });
-    // }
-
-    // const alreadyFollowing = sender.following.some(
-    //   (f) => f.userId.toString() === receverId
-    // );
-    // if (alreadyFollowing) {
-    //   return res.status(400).json({ message: 'Already following this user' });
-    // }
-
+    const receiver = await userDetailsModel.findById(receiverId);
     sender.following.push({
       userId: receiver._id,
       email: receiver.email,
-      connection: true,
+      connection: false,
     });
 
     receiver.followers.push({
       userId: sender._id,
       email: sender.email,
-      connection: true,
+      connection: false,
     });
 
     await sender.save();
     await receiver.save();
 
-    return res.status(200).json({ message: 'Follow successful' });
+    return res.status(200).json({ message: 'Followed' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }

@@ -2,14 +2,19 @@ import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
+  const navigate = useNavigate();
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
+  const Posts = useSelector((state) => state.users.Posts);
+  const followers = useSelector((state) => state.users.followers);
+  const following = useSelector((state) => state.users.following);
 
   const userCredentails = [
-    { credential: '300', credentialName: 'Post' },
-    { credential: '1000', credentialName: 'Followers' },
-    { credential: '100', credentialName: 'Following' },
+    { credential: Posts?.length, credentialName: 'Post' },
+    { credential: followers.length, credentialName: 'Followers' },
+    { credential: following.length, credentialName: 'Following' },
   ]
 
   return (
@@ -40,7 +45,7 @@ const Profile = () => {
       </div>
 
       <div className='flex w-full mt-3'>
-        <Button className='flex-1 w-full bg-app-theme hover:bg-app-theme/80 cursor-pointer'>My Profile</Button>
+        <Button onClick={() => navigate(`/user/profile/${userDetails?.users?._id}`)}  className='flex-1 w-full bg-app-theme hover:bg-app-theme/80 cursor-pointer'>My Profile</Button>
       </div>
     </div>
   )
