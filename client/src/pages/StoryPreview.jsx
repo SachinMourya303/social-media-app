@@ -16,23 +16,12 @@ const StoryPreview = () => {
 
   const findUser = users.find((user) => user._id === storyId);
 
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     navigate('/');
-  //   }, 15000);
-  //   return () => clearTimeout(timer);
-  // }, [navigate]);
-
-  const deleteStory = async (id) => {
-    try {
-      const response = await axios.delete(`${import.meta.env.VITE_API_URI}/users/delete/story/${id}`);
-      if (response.ok) {
-        navigate('/');
-      }
-    } catch (error) {
-      toast.error(error.message || 'Something went wrong');
-    }
-  }
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigate('/');
+    }, 15000);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
   const deleteStory = async (id) => {
     try {
