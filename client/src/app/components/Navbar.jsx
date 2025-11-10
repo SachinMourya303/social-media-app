@@ -9,6 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
 import { setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
+
+
 const Navbar = () => {
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
   const dispatch = useDispatch();
