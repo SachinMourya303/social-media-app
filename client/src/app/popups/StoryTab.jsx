@@ -1,70 +1,100 @@
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { CircleFadingPlus, Image, SendHorizonal, Video, X } from 'lucide-react'
-import React, { useState } from 'react'
+import { Image, SendHorizonal, Video } from 'lucide-react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setStoryDialogBox } from '../stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { Spinner } from '@/components/ui/spinner';
+import { setAddStoryDialogBox } from '../stateManagement/slice/popupSlice';
 
 const StoryTab = () => {
-    const { userToken, userDetails, darkmode } = useSelector(state => state.userAuth);
-    const storyDialogBox = useSelector(state => state.popup.storyDialogBox);
+    const { userDetails, darkmode } = useSelector(state => state.userAuth);
+    const addStoryDialogBox = useSelector(state => state.popup.addStoryDialogBox);
+    const [loader, setLoader] = useState(false);
+    const [storyFile, setStoryFile] = useState(null);
+    const [storyVideo, setStoryVideo] = useState(null);
+    const [storyData, setStoryData] = useState({ caption: "" });    
+    
     const dispatch = useDispatch();
-    const [storyFile, setStoryFile] = useState();
-    const [storyVideo, setStoryVideo] = useState();
 
-    return (
-        <div className='flex justify-center w-full transition-all'>
-            <div className={`flex flex-col items-center w-full md:w-[50%] shadow-lg rounded-md p-5 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'}`}>
-                <div className={`flex justify-between w-full ${darkmode ? 'text-darkmode-text truncate text-center' : 'text-gray-500 truncate text-center'} `}>
-                    <strong>Add Story</strong>
-                    <X onClick={() => dispatch(setStoryDialogBox())} className='cursor-pointer'/>
-                </div>
-                <figure className={`mt-5 w-full rounded-lg flex justify-center cursor-pointer`}>
-                    <input type="file" onChange={(e) => setStoryFile(e.target.files[0])} id='story-file' hidden accept='image/*' />
-                    <input type="file" onChange={(e) => setStoryVideo(e.target.files[0])} id='story-video' hidden accept='video/*' />
-                    {
-                        storyFile
-                            ? <label className='cursor-pointer'>
-                                {
-                                    storyFile
-                                        ? <img src={URL.createObjectURL(storyFile)} alt="story" />
-                                        : <img src={darkmode ? websiteLogo.whiteVideoImageIcon : websiteLogo.blackVideoImageIcon} alt="story" className='opacity-20 h-50 p-5'/>
-                                }
+    const onCaptionChange = (e) => {
+        const { name, value } = e.target;
+        setStoryData(prev => ({ ...prev, [name]: value }));
+    }
+
+    const onStoryFormSubmit = async (e) => {
+        e.preventDefault();
+        setLoader(true);
+        if (!userDetails?.users?._id) return toast.error("No user id found");
+        if (!storyFile && !storyVideo) return toast.error("Please select a photo or video first");
+        try {
+            const formData = new FormData();
+            formData.append('file', storyFile || storyVideo);
+            formData.append('caption', storyData.caption);
+            const response = await axios.put(`${import.meta.env.VITE_API_URI}/users/upload/story/${userDetails?.users?._id}`, formData, {
+                headers: { "Content-Type": "multipart/form-data" }
+            });
+            toast.success(response.data.message || 'Uploded');
+            setStoryFile(null);
+            setStoryVideo(null);
+        } catch (error) {
+            toast.error(error.response?.data?.message || "Failed to upload story");
+            console.log(error.message);
+        }
+        finally {
+            setLoader(false);
+            dispatch(setAddStoryDialogBox(false));
+        }
+    }
+
+    return addStoryDialogBox && (
+        <form onSubmit={onStoryFormSubmit} className='w-full'>
+            <div className="flex w-[90%] mt-2 p-2">Add Story</div>
+            <hr />
+            <figure className={`w-full h-[320px] xl:h-[380px] rounded-lg flex items-center justify-center cursor-pointer`}>
+                <input type="file" onChange={(e) => { setStoryFile(e.target.files[0]); setStoryVideo(null); }} id='story-file' hidden accept='image/*' />
+                <input type="file" onChange={(e) => { setStoryVideo(e.target.files[0]); setStoryFile(null); }} id='story-video' hidden accept='video/*' />
+                {
+                    storyFile
+                        ? <label className='relative cursor-pointer h-full w-full flex items-center justify-center'>
+                            <img src={URL.createObjectURL(storyFile)} alt="story" className='object-cover object-center h-full w-full' />
+                            <div className='absolute z-10'>
+                                {loader ? <Spinner className='size-20 text-white' /> : ''}
+                            </div>
+                        </label>
+                        : storyVideo
+                            ? <label className=' relative cursor-pointer h-full w-full flex items-center justify-center'>
+                                <video src={URL.createObjectURL(storyVideo)} alt="story" controls className='object-cover object-center h-full w-full' />
+                                <div className='absolute z-10'>
+                                    {loader ? <Spinner className='size-20 text-white' /> : ''}
+                                </div>
                             </label>
-
-                            : <label className='cursor-pointer'>
-                                {
-                                    storyVideo
-                                        ? <video src={URL.createObjectURL(storyVideo)} alt="story" controls />
-                                        : <img src={darkmode ? websiteLogo.whiteVideoImageIcon : websiteLogo.blackVideoImageIcon} alt="story" className='opacity-20 h-50 p-5'/>
-
-                                }
+                            : <label className='cursor-pointer h-full w-full flex items-center justify-center'>
+                                <img src={darkmode ? websiteLogo.whiteVideoImageIcon : websiteLogo.blackVideoImageIcon} alt="story" className='opacity-20 h-50 p-5 object-cover object-center' />
                             </label>
-                    }
-                </figure>
+                }
+            </figure>
 
-                <div className='w-full flex items-center justify-between mt-5'>
-                    <Input className={`w-[85%] border-0 rounded-lg flex gap-2 items-center px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'}`} placeholder='Add Caption...' />
-                    <span>
-                        <SendHorizonal className='size-10 p-2 text-blue-500 bg-blue-200 rounded-full cursor-pointer' />
-                    </span>
-                </div>
-
-                <div className='flex gap-2 mt-5 w-full'>
-                    <label htmlFor='story-file' onClick={(e) => setStoryVideo()} className='flex items-center justify-center gap-3 w-[50%] bg-blue-400 text-white hover:bg-blue-400/80 cursor-pointer rounded-lg p-2'>
-                        <Image />
-                        <span>Photo</span>
-                    </label>
-                    <label htmlFor='story-video' onClick={(e) => setStoryVideo()} className='flex items-center justify-center gap-3 w-[50%] bg-red-400 text-white hover:bg-red-400/80 cursor-pointer rounded-lg p-2'>
-                        <Video />
-                        <span>Video</span>
-                    </label>
-                </div>
-
+            <div className='w-full flex items-center justify-between px-2 mt-2'>
+                <Input onChange={onCaptionChange} name="caption" value={storyData.caption} className={`w-[85%] md:w-[90%] border-0 rounded-lg flex gap-2 items-center px-2 ring-0! shadow-none ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'}`} placeholder='Add Caption...' />
+                <button type='submit' className='bg-transparent hover:bg-transparent cursor-pointer'>
+                    <SendHorizonal className='size-10 p-2 text-blue-500 bg-blue-200 rounded-full' />
+                </button>
             </div>
-        </div>
+
+            <div className='flex gap-2 mt-5 w-full px-2'>
+                <label htmlFor='story-file' onClick={(e) => setStoryVideo(null)} className='flex items-center justify-center gap-3 w-[50%] bg-blue-400 text-white hover:bg-blue-400/80 cursor-pointer rounded-lg p-2'>
+                    <Image />
+                    <span>Photo</span>
+                </label>
+                <label htmlFor='story-video' onClick={(e) => setStoryFile(null)} className='flex items-center justify-center gap-3 w-[50%] bg-red-400 text-white hover:bg-red-400/80 cursor-pointer rounded-lg p-2'>
+                    <Video />
+                    <span>Video</span>
+                </label>
+            </div>
+        </form>
     )
 }
 
-export default StoryTab
+export default StoryTab;

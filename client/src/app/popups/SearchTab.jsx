@@ -1,16 +1,21 @@
 import { websiteLogo } from "@/assets/assets";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
+import { sendFollowRequest } from "@/utils/followService";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const SearchTab = () => {
+  const searchDialogBox = useSelector(state => state.popup.searchDialogBox);
   const loggedUser = useSelector(state => state.users.loggedUser);
   const [searchValue, setSearchValue] = useState("");
   const [searchedUser, setSearchedUser] = useState([]);
   const users = useSelector((state) => state.users.usersData);
+  const followButtonLoading = useSelector(state => state.users.followButtonLoading);
+  const dispatch = useDispatch();
 
   const onSearchInput = (e) => {
     const value = e.target.value;
@@ -36,7 +41,12 @@ const SearchTab = () => {
     if (found.connection === false) return "Requested";
   };
 
-  return (
+  const followService = async (receiver_Id) => {
+    await sendFollowRequest(dispatch, loggedUser._id, receiver_Id);
+  }
+
+
+  return searchDialogBox && (
     <div className="w-full">
       <div className="flex w-[90%]">
         <Input onChange={onSearchInput} name="search" value={searchValue} className="border-0 outline-none ring-0! shadow-none mt-2" placeholder="Search friends" />
@@ -52,7 +62,7 @@ const SearchTab = () => {
                 <span>{user.username}</span>
               </div>
               {status === "Follow"
-                ? <Button className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[15%] text-xs h-7">Follow</Button>
+                ? <Button onClick={() => { followService(user._id); getFollowStatus(user.email) }} className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[15%] text-xs h-7">{followButtonLoading ? <Spinner /> : 'Follow'}</Button>
                 : ""
               }
               {status === "Following"

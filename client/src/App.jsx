@@ -9,15 +9,16 @@ import Auth from './pages/authontication/Auth';
 import Layout from './pages/Layout';
 import UserDetails from './app/popups/UserDetails';
 import FeedsPage from './pages/FeedsPage';
-import StoryPage from './pages/StoryPage';
 
-import { setFollowing, setIsLoading, setUsers } from './app/stateManagement/slice/usersSlice';
+import { setFollowers, setFollowing, setIsLoading, setUsers } from './app/stateManagement/slice/usersSlice';
+import UserProfilePage from './pages/UserProfilePage';
+import StoryPreview from './pages/StoryPreview';
 
 const App = () => {
   const dispatch = useDispatch();
   const { userToken, userDetails } = useSelector((state) => state.userAuth);
   const users = useSelector((state) => state.users.usersData);
-  
+
 
   const { data, isPending } = useQuery({
     queryKey: ['users'],
@@ -48,27 +49,28 @@ const App = () => {
       );
       dispatch(setFollowing(following));
     }
+
+    if (accountHolder && users.length > 0) {
+      const followers = users.filter((user) =>
+        accountHolder.followers?.some((f) => f.email === user.email)
+      );
+      dispatch(setFollowers(followers));
+    }
   }, [accountHolder, users, dispatch]);
 
   return (
     <>
       <Toaster />
       <Routes>
-        <Route
-          path="/login"
-          element={userToken === '' ? <Auth /> : <Navigate to="/user-details" />}
-        />
-        <Route
-          path="/user-details"
-          element={userDetails === '' ? <UserDetails /> : <Navigate to="/" />}
-        />
-        <Route
-          path="/"
-          element={userDetails === '' ? <Navigate to="/login" /> : <Layout />}
-        >
+        <Route path="/login" element={userToken === '' ? <Auth /> : <Navigate to="/user-details" />} />
+        <Route path="/user-details" element={userDetails === '' ? <UserDetails /> : <Navigate to="/" />} />
+
+        <Route path="/" element={userDetails === '' ? <Navigate to="/login" /> : <Layout />}>
           <Route index element={<FeedsPage />} />
+          <Route path='/user/profile/:userId' element={<UserProfilePage />} />
         </Route>
-        <Route path="/stories/:storyId" element={<StoryPage />} />
+
+        <Route path="/stories/:storyId" element={<StoryPreview />} />
       </Routes>
     </>
   );

@@ -1,15 +1,39 @@
 import UserDetails from '@/app/popups/UserDetails'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
 import Navbar from '@/app/components/Navbar'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import SideBar from '@/app/components/Sidebar/SideBar'
 import ChatPage from '@/app/components/ChatPage/ChatPage'
+import PopupWrapper from '@/app/ReusableComponents/PopupWrapper'
+import SearchTab from '@/app/popups/SearchTab'
+import StoryTab from '@/app/popups/StoryTab'
+import { setLoggedUser } from '@/app/stateManagement/slice/usersSlice'
 
 const Layout = () => {
   const { userDetails , darkmode } = useSelector(state => state.userAuth);
+  const dispatch = useDispatch();
+  const users = useSelector((state) => state.users.usersData);  
+
+   useEffect(() => {
+    if (userDetails?.users?._id && users?.length > 0) {
+      const fetchLoggedUser = users.find(
+        (loggedU) => loggedU._id === userDetails.users._id
+      );
+      if (fetchLoggedUser) {
+        dispatch(setLoggedUser(fetchLoggedUser));
+      }
+    }
+  }, [userDetails, users, dispatch]);
+
   return (
     <div className={darkmode ? 'bg-darkmode h-screen' : 'bg-gray-50 h-screen'}>
+      <div>
+        <PopupWrapper >
+          <SearchTab />
+          <StoryTab />
+        </PopupWrapper>
+      </div>
       <div>
         <Navbar />
       </div>
