@@ -15,6 +15,8 @@ const StoryPreview = () => {
   const { storyId } = useParams();
 
   const findUser = users.find((user) => user._id === storyId);
+  console.log(findUser);
+  
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -25,7 +27,7 @@ const StoryPreview = () => {
 
   const deleteStory = async (id) => {
     try {
-      const response = await axios.delete(`${import.meta.env.VITE_API_URI}/users/delete/story/${id}`);
+      const response = await axios.put(`${import.meta.env.VITE_API_URI}/users/delete/story/${id}`);
       if (response.ok) {
         navigate('/');
       }
