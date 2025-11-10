@@ -71,7 +71,7 @@ userDetailsRoutes.put('/upload/story/:userId',
       if (!updatedUser) {
         return res.status(404).json({ message: 'User not found' });
       }
-       
+
       console.log('Story File being sent:', updatedUser.storyFile);
       return res.status(200).json({
         message: 'Story uploaded successfully',
@@ -83,6 +83,22 @@ userDetailsRoutes.put('/upload/story/:userId',
     }
   }
 );
+
+userDetailsRoutes.delete('/delete/story/:storyId', async (req, res) => {
+  try {
+    const { storyId } = req.params;
+
+    const deletedStory = await userDetailsModel.findByIdAndDelete(storyId);
+    if (!deletedStory) {
+      return res.status(404).json({ message: 'Story not found' });
+    }
+
+    return res.status(200).json({ message: 'Story deleted successfully', deletedStory });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 
 userDetailsRoutes.put('/following', async (req, res) => {
   try {
