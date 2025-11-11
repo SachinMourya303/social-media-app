@@ -4,6 +4,7 @@ const initialState = {
     addStoryDialogBox: false,
     storyDialogBox: false,
     searchDialogBox: false,
+    loader : false,
 }
 
 const popupSlice = createSlice({
@@ -19,8 +20,11 @@ const popupSlice = createSlice({
         setSearchDialogBox: (state , action) => {
             state.searchDialogBox = action.payload;
         },
+         setLoader: (state , action) => {
+            state.loader = action.payload;
+        },
     }
 })
 
-export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox } = popupSlice.actions;
+export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox , setLoader } = popupSlice.actions;
 export default popupSlice.reducer;

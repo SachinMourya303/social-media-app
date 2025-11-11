@@ -53,7 +53,7 @@ const SearchTab = () => {
       </div>
       <hr />
       <div className="p-2">
-        {searchedUser.map(user => {
+        {searchedUser.filter((user) => user.username !== loggedUser.username).map(user => {
           const status = getFollowStatus(user.email);
           return (
             <div key={user._id} className="flex justify-between items-center mt-3">
@@ -62,15 +62,15 @@ const SearchTab = () => {
                 <span>{user.username}</span>
               </div>
               {status === "Follow"
-                ? <Button onClick={() => { followService(user._id); getFollowStatus(user.email) }} className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[15%] text-xs h-7">{followButtonLoading ? <Spinner /> : 'Follow'}</Button>
+                ? <Button onClick={() => { followService(user._id); getFollowStatus(user.email) }} className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[25%] md:w-[15%] text-xs h-7">{followButtonLoading ? <Spinner /> : 'Follow'}</Button>
                 : ""
               }
               {status === "Following"
-                ? <Button className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[15%] text-xs h-7">Following</Button>
+                ? <Button className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[25%] md:w-[15%] text-xs h-7">Following</Button>
                 : ""
               }
               {status === "Requested"
-                ? <Button className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[15%] text-xs h-7">Requested</Button>
+                ? <Button className="bg-transparent text-primary hover:bg-transparent cursor-pointer border w-[25%] md:w-[15%] text-xs h-7">Requested</Button>
                 : ""
               }
             </div>
