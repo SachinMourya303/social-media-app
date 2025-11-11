@@ -90,7 +90,8 @@ userDetailsRoutes.put('/delete/story/:storyId', async (req, res) => {
     const user = await userDetailsModel.findById(storyId);
     if (!user) return res.status(404).json({ message: 'Story not found' });
 
-    user.storyFile = null;
+    user.storyFile.url = null,
+    user.storyFile.caption = null;
 
     const saved = await user.save();
     return res.status(200).json({ message: 'Story deleted successfully', user: saved });
