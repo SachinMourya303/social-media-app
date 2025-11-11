@@ -4,11 +4,11 @@ import { Outlet } from 'react-router-dom'
 import Navbar from '@/app/components/Navbar'
 import { useDispatch, useSelector } from 'react-redux'
 import SideBar from '@/app/components/Sidebar/SideBar'
-import ChatPage from '@/app/components/ChatPage/ChatPage'
 import PopupWrapper from '@/app/ReusableComponents/PopupWrapper'
 import SearchTab from '@/app/popups/SearchTab'
 import StoryTab from '@/app/popups/StoryTab'
 import { setLoggedUser } from '@/app/stateManagement/slice/usersSlice'
+import RightOutlet from '@/app/components/ChatPage/RightOutlet'
 
 const Layout = () => {
   const { userDetails , darkmode } = useSelector(state => state.userAuth);
@@ -40,7 +40,7 @@ const Layout = () => {
       <div className='grid grid-cols-1 md:grid-cols-[0fr_2fr_1fr]  xl:grid-cols-[0.7fr_2fr_1fr]'>
         <SideBar />
         <Outlet />
-        <ChatPage />
+        <RightOutlet />
       </div>
     </div>
   )

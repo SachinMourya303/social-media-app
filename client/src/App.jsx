@@ -13,6 +13,9 @@ import FeedsPage from './pages/FeedsPage';
 import { setFollowers, setFollowing, setIsLoading, setUsers } from './app/stateManagement/slice/usersSlice';
 import UserProfilePage from './pages/UserProfilePage';
 import StoryPreview from './pages/StoryPreview';
+import Chatpage from './pages/Chatpage';
+import NotificationPage from './pages/NotificationPage';
+import RightOutlet from './app/components/ChatPage/RightOutlet';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -67,11 +70,17 @@ const App = () => {
 
         <Route path="/" element={userDetails === '' ? <Navigate to="/login" /> : <Layout />}>
           <Route index element={<FeedsPage />} />
-          <Route path='/user/profile/:userId' element={<UserProfilePage />} />
+          <Route path='user/profile/:userId' element={<UserProfilePage />} />
         </Route>
 
-        <Route path="/stories/:storyId" element={<StoryPreview />} />
+        <Route path="stories/:storyId" element={<StoryPreview />} />
+
+        <Route path='right-outlet' element={<RightOutlet />} >
+          <Route index element={<Chatpage />} />
+          <Route path='notification' element={<NotificationPage />} />
+        </Route>
       </Routes>
+
     </>
   );
 };
