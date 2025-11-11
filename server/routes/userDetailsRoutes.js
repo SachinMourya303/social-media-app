@@ -135,4 +135,31 @@ userDetailsRoutes.put('/following', async (req, res) => {
   }
 });
 
+userDetailsRoutes.put('/conform/follow', async (req, res) => {
+  try {
+    const { senderId, receiverId } = req.body;
+
+    const sender = await userDetailsModel.findById(senderId);
+    const receiver = await userDetailsModel.findById(receiverId);
+    sender.following.push({
+      userId: receiver._id,
+      email: receiver.email,
+      connection: true,
+    });
+
+    receiver.followers.push({
+      userId: sender._id,
+      email: sender.email,
+      connection: true,
+    });
+
+    await sender.save();
+    await receiver.save();
+
+    return res.status(200).json({ message: 'Followed' });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
+
 export default userDetailsRoutes;
