@@ -89,11 +89,11 @@ userDetailsRoutes.put('/delete/story/:userId', async (req, res) => {
     const { userId } = req.params;
     const updated = await userDetailsModel.findByIdAndUpdate(
       userId,
-      { 
-        $set: { 
-          'storyFile.url': null, 
-          'storyFile.caption': null 
-        } 
+      {
+        $set: {
+          'storyFile.url': null,
+          'storyFile.caption': null
+        }
       },
       { new: true }
     );
@@ -129,37 +129,57 @@ userDetailsRoutes.put('/following', async (req, res) => {
     await sender.save();
     await receiver.save();
 
-    return res.status(200).json({ message: 'Followed' });
+    return res.status(200).json({ message: 'Requested' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
 
-userDetailsRoutes.put('/conform/follow', async (req, res) => {
+userDetailsRoutes.put('/confirm/follow', async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
 
     const sender = await userDetailsModel.findById(senderId);
     const receiver = await userDetailsModel.findById(receiverId);
-    sender.following.push({
-      userId: receiver._id,
-      email: receiver.email,
-      connection: true,
-    });
 
-    receiver.followers.push({
-      userId: sender._id,
-      email: sender.email,
-      connection: true,
-    });
+    if (!sender || !receiver) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const alreadyFollowing = sender.following.some(
+      (f) => f.userId.toString() === receiver._id.toString()
+    );
+
+    if (!alreadyFollowing) {
+      sender.following.push({
+        userId: receiver._id,
+        email: receiver.email,
+        connection: true,
+      });
+    } else {
+      sender.following = sender.following.map((f) =>
+        f.userId.toString() === receiver._id.toString()
+          ? { ...f, connection: true, email: receiver.email }
+          : f
+      );
+    }
+
+    const updatedFollowers = receiver.followers.map((f) =>
+      f.userId.toString() === sender._id.toString()
+        ? { ...f, connection: true, email: sender.email }
+        : f
+    );
+
+    receiver.followers = updatedFollowers;
 
     await sender.save();
     await receiver.save();
 
-    return res.status(200).json({ message: 'Followed' });
+    return res.status(200).json({ message: 'Follow confirmed successfully' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
+
 
 export default userDetailsRoutes;
