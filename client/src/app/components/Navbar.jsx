@@ -7,7 +7,7 @@ import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
-import { setSearchDialogBox } from '../stateManagement/slice/popupSlice';
+import { setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
 
 
@@ -24,8 +24,8 @@ const Navbar = () => {
     { title: 'Search', clickFunction: () => { navigate('/'); setMenu(false); setActive('Search'); dispatch(setSearchDialogBox(true)) }, icon: <SearchIcon className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Create', clickFunction: () => { navigate('/'); setMenu(false); setActive('Create') }, icon: <CircleFadingPlus className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Theme', clickFunction: () => { dispatch(setDarkMode(true)); setMenu(false); setActive('Theme') }, icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message') }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification') }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
+    { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message'); dispatch(setRightOutletBox('chatpage')) }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
+    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification'); dispatch(setRightOutletBox('notification')); }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
   ]
 
   const isLoading = useSelector(state => state.users.isLoading);
@@ -53,7 +53,7 @@ const Navbar = () => {
 
           <div onClick={() => dispatch(setSearchDialogBox(true))} className={`hidden md:flex gap-2 items-center cursor-text px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
             <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
-            <Input className={`w-full border-0 ring-0! shadow-none outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search friends' disabled/>
+            <Input className={`w-full border-0 ring-0! shadow-none outline-none ${darkmode ? 'placeholder:text-darkmode-text' : 'placeholder:text-gray-500'}`} placeholder='Search friends' disabled />
           </div>
 
           <div className='hidden md:flex items-center gap-2'>
@@ -66,12 +66,12 @@ const Navbar = () => {
 
               <BiSolidBrightnessHalf onClick={() => dispatch(setDarkMode(true))} className={`text-3xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
               <div className='relative'>
-                <MessageCircleMore className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <MessageCircleMore onClick={() => dispatch(setRightOutletBox('chatpage'))} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
                 <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
               </div>
 
               <div className='relative'>
-                <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <Bell onClick={() => dispatch(setRightOutletBox('notification'))} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
                 <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
               </div>
             </div>

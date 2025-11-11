@@ -84,29 +84,28 @@ userDetailsRoutes.put('/upload/story/:userId',
   }
 );
 
-userDetailsRoutes.put('/delete/story/:storyId', async (req, res) => {
+userDetailsRoutes.put('/delete/story/:userId', async (req, res) => {
   try {
-    const { storyId } = req.params;
+    const { userId } = req.params;
+    const updated = await userDetailsModel.findByIdAndUpdate(
+      userId,
+      { 
+        $set: { 
+          'storyFile.url': null, 
+          'storyFile.caption': null 
+        } 
+      },
+      { new: true }
+    );
 
-    const userStoryToDelete = await userDetailsModel.findById(storyId);
-    if (!userStoryToDelete) {
-      return res.status(404).json({ message: 'Story not found' });
-    }
+    if (!updated) return res.status(404).json({ message: 'User not found' });
 
-    userStoryToDelete.storyFile.push({
-      caption: null,
-      createdAt: null,
-      type: null,
-      url: null,
-    });
-
-    await userStoryToDelete.save();
-
-    return res.status(200).json({ message: 'Story deleted successfully', deletedStory });
+    return res.status(200).json({ message: 'Story deleted successfully', user: updated });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 });
+
 
 
 userDetailsRoutes.put('/following', async (req, res) => {
