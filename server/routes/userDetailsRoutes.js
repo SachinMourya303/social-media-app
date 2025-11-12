@@ -139,7 +139,6 @@ userDetailsRoutes.put('/following', async (req, res) => {
 userDetailsRoutes.put('/confirm/follow', async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
-
     const sender = await userDetailsModel.findById(senderId);
     const receiver = await userDetailsModel.findById(receiverId);
 
@@ -147,35 +146,30 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    sender.following.push({
-      userId: receiver._id,
-      email: receiver.email,
-      connection: true,
-    });
+    await Promise.all([
+      userDetailsModel.updateOne(
+        { _id: senderId, "followers.userId": receiverId },
+        { $set: { "followers.$.connection": true } }
+      ),
+      userDetailsModel.updateOne(
+        { _id: receiverId, "following.userId": senderId },
+        { $set: { "following.$.connection": true } }
+      )
+    ]);
 
-     await userDetailsModel.updateOne(
-      { _id: senderId, "followers.userId": receiverId },
-      { $set: { "followers.$.connection": true } }
-    );
+    if (!sender.following.some(f => f.userId.toString() === receiverId)) {
+      sender.following.push({ userId: receiver._id, email: receiver.email, connection: true });
+    }
+    if (!receiver.followers.some(f => f.userId.toString() === senderId)) {
+      receiver.followers.push({ userId: sender._id, email: sender.email, connection: true });
+    }
 
-     receiver.followers.push({
-      userId: sender._id,
-      email: sender.email,
-      connection: true,
-    });
+    await Promise.all([sender.save(), receiver.save()]);
 
-    await userDetailsModel.updateOne(
-      { _id: receiverId, "following.userId": senderId },
-      { $set: { "following.$.connection": true } }
-    );
-
-    await sender.save();
-    await receiver.save();
-
-    return res.status(200).json({ message: 'Following' });
+    res.status(200).json({ message: 'Following' });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 });
 
