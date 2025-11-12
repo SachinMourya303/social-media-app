@@ -7,7 +7,7 @@ import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
-import { setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
+import { setPostDialogBox, setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
 
 
@@ -63,7 +63,7 @@ const Navbar = () => {
             </Link>
 
             <div className='flex items-center w-full justify-evenly'>
-              <CircleFadingPlus className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+              <CircleFadingPlus onClick={() => dispatch(setPostDialogBox(true))} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
 
               <BiSolidBrightnessHalf onClick={() => dispatch(setDarkMode(true))} className={`text-3xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
               <div className='relative'>
