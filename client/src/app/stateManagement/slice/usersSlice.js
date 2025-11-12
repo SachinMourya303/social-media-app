@@ -8,6 +8,7 @@ const initialState = {
     followers: [],
     following: [],
     followButtonLoading: false,
+    notification: [],
 }
 
 const userSlice = createSlice({
@@ -35,8 +36,11 @@ const userSlice = createSlice({
         setFollowButtonLoading: (state, action) => {
             state.followButtonLoading = action.payload;
         },
+        setNotification: (state, action) => {
+            state.notification = action.payload;
+        },
     }
 })
 
-export const { setUsers, setLoggedUser, setIsLoading, setFollowers, setFollowing, setUserStoryId , setFollowButtonLoading } = userSlice.actions;
+export const { setUsers, setLoggedUser, setIsLoading, setFollowers, setFollowing, setUserStoryId , setFollowButtonLoading , setNotification} = userSlice.actions;
 export default userSlice.reducer;

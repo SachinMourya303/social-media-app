@@ -3,23 +3,30 @@ import FeedsCardWrapper from '@/app/ReusableComponents/FeedsCardWrapper'
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft } from 'lucide-react';
-import React from 'react'
+import { Skeleton } from 'primereact/skeleton';
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const UserProfilePage = () => {
     const users = useSelector(state => state.users.usersData);
-
+    const loggedUser = useSelector(state => state.users.loggedUser);
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
 
     const posts = useSelector((state) => state.users.Posts);
-    const followers = useSelector((state) => state.users.followers);    
+    const followers = useSelector((state) => state.users.followers);
     const following = useSelector((state) => state.users.following);
+    const [fWCT, setFWCT] = useState([]);
+
+    useEffect(() => {
+        const followersWithConnectionTrue = followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true));
+        setFWCT(followersWithConnectionTrue);
+    }, [followers]);
 
 
     const userCredentails = [
-        { credential: posts?.length, credentialName: 'Posts' },
-        { credential: followers.length, credentialName: 'Followers' },
+        { credential: posts?.length, credentialName: 'Post' },
+        { credential: fWCT.length, credentialName: 'Followers' },
         { credential: following.length, credentialName: 'Following' },
     ]
 
@@ -31,7 +38,7 @@ const UserProfilePage = () => {
                 <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Edit Profile</Button>
                 <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Share Profile</Button>
             </div>;
-        } else if (userDetails?.users?.following?.includes(userId)) {
+        } else if (followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true))) {
             return <div className='flex items-center justify-evenly w-full'>
                 <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Following</Button>
                 <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Message</Button>
@@ -47,11 +54,32 @@ const UserProfilePage = () => {
     const { userId } = useParams();
 
     const findUser = users.find((user) => user._id === userId);
+
+    const isLoading = useSelector(state => state.users.isLoading);
+
+    if (isLoading) return <div className='flex flex-col ml-5 xl:ml-0 md:mt-10 mr-5'>
+        <div className="flex mb-3">
+            <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+            <div>
+                <Skeleton width="10rem" className="mb-2"></Skeleton>
+                <Skeleton width="5rem" className="mb-2"></Skeleton>
+                <Skeleton height=".5rem"></Skeleton>
+            </div>
+        </div>
+        <Skeleton width="100%" height="150px"></Skeleton>
+        <div className="flex justify-content-between mt-3">
+            <Skeleton width="4rem" height="2rem"></Skeleton>
+            <Skeleton width="4rem" height="2rem"></Skeleton>
+        </div>
+    </div>
+
     return (
-        <div className='mt-5'>
+        <div className='mt-5 md:mr-5'>
             <FeedsCardWrapper >
-                <ChevronLeft onClick={() => navigate('/')} className={`cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}/>
                 <div className='w-full flex flex-col items-center'>
+                    <div className='flex justify-start w-full ml-[-20px]'>
+                        <ChevronLeft onClick={() => navigate('/')} className={`cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
+                    </div>
                     <div className='flex justify-evenly items-center w-full'>
                         <figure className='w-30 h-30 md:w-50 md:h-50 rounded-full overflow-hidden'>
                             {findUser?.profile !== null

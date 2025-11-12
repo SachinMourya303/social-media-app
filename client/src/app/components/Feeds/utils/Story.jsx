@@ -12,22 +12,21 @@ import { useNavigate } from 'react-router-dom';
 
 const Story = () => {
   const followers = useSelector(state => state.users.followers);
-  // console.log(followers);
-  
 
   const { userToken, userDetails, darkmode } = useSelector(state => state.userAuth);
+  const loggedUser = useSelector(state => state.users.loggedUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const users = useSelector(state => state.users.usersData);
-  
-  const [uploadedStory , setUploadedStory] = useState(null);
+
+  const [uploadedStory, setUploadedStory] = useState(null);
 
   useEffect(() => {
     const findUser = users.find((user) => user._id === userDetails?.users._id);
     setUploadedStory(findUser);
-  } , []);
+  }, []);
 
-  const storyPreview = () => {    
+  const storyPreview = () => {
     if (uploadedStory?.storyFile?.url !== null) {
       navigate(`/stories/${userDetails?.users._id}`)
     } else {
@@ -61,12 +60,12 @@ const Story = () => {
                 <div className={`absolute hidden group-hover:flex flex-col top-20 left-0 rounded-tl ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
                   <Button onClick={storyPreview} className={`bg-transparent ${darkmode ? 'darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>View Story</Button>
                   <hr className='border-t border-gray-300' />
-                  <Button onClick={() => {dispatch(setAddStoryDialogBox(true)); dispatch(setSearchDialogBox(false))}} className={`bg-transparent ${darkmode ? 'darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>Add Story</Button>
+                  <Button onClick={() => { dispatch(setAddStoryDialogBox(true)); dispatch(setSearchDialogBox(false)) }} className={`bg-transparent ${darkmode ? 'darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>Add Story</Button>
                 </div>
               </div>
 
               <div className='flex items-center justify-center gap-2'>
-                {followers.map((user, index) => (
+                {followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true)).map((user, index) => (
                   <div onClick={() => navigate(`/stories/${user?._id}`)} key={index} className='flex flex-col w-15 items-center justify-center gap-2'>
 
                     <figure className='w-15 h-15 rounded-full overflow-hidden cursor-pointer'>
@@ -81,7 +80,7 @@ const Story = () => {
                     </figure>
 
                     <span className={`text-xs w-15 ${darkmode ? 'text-darkmode-text truncate text-center' : 'text-gray-500 truncate text-center'}`}>
-                      {user.username.slice(0 , 7)}
+                      {user.username.slice(0, 7)}
                     </span>
                   </div>
                 ))}
