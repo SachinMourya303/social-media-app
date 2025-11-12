@@ -114,6 +114,7 @@ userDetailsRoutes.put('/following', async (req, res) => {
 
     const sender = await userDetailsModel.findById(senderId);
     const receiver = await userDetailsModel.findById(receiverId);
+
     sender.following.push({
       userId: receiver._id,
       email: receiver.email,
@@ -139,24 +140,12 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
 
-    const sender = await userDetailsModel.findById(senderId);
-    const receiver = await userDetailsModel.findById(receiverId);
+    const receiver = await userDetailsModel.findById(senderId);
+    const sender = await userDetailsModel.findById(receiverId);
 
     if (!sender || !receiver) {
       return res.status(404).json({ message: 'User not found' });
     }
-
-    sender.following.push({
-      userId: receiver._id,
-      email: receiver.email,
-      connection: true,
-    });
-
-    sender.followers.push({
-      userId: receiver._id,
-      email: receiver.email,
-      connection: true,
-    });
 
     receiver.following.push({
       userId: sender._id,
@@ -164,12 +153,26 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
       connection: true,
     });
 
-    receiver.followers.push({
-      userId: sender._id,
-      email: sender.email,
-      connection: true,
+    const existingReceiver = receiver.followers.find(
+      (f) => f.userId.toString() === senderId
+    );
+    if (existingReceiver) {
+      existingReceiver.connection = true;
+    }
+
+    sender.followers.push({
+      userId: receiver._id,
+      email: receiver.email,
+      connection: false,
     });
-    
+
+    const existingSender = sender.following.find(
+      (f) => f.userId.toString() === receiverId
+    );
+    if (existingSender) {
+      existingSender.connection = true;
+    }
+
     await sender.save();
     await receiver.save();
 
