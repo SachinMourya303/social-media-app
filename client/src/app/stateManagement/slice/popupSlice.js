@@ -4,7 +4,7 @@ const initialState = {
     addStoryDialogBox: false,
     storyDialogBox: false,
     searchDialogBox: false,
-    postDialogBox: true,
+    postDialogBox: false,
     loader: false,
     rightOutletBox: "chatpage",
 }

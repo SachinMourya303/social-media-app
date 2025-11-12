@@ -6,7 +6,7 @@ import { websiteLogo } from '@/assets/assets';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Spinner } from '@/components/ui/spinner';
-import { setAddStoryDialogBox } from '../stateManagement/slice/popupSlice';
+import { setAddStoryDialogBox, setPostDialogBox } from '../stateManagement/slice/popupSlice';
 
 const PostTab = () => {
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
@@ -32,7 +32,7 @@ const PostTab = () => {
             const formData = new FormData();
             formData.append('file', storyFile || storyVideo);
             formData.append('caption', storyData.caption);
-            const response = await axios.put(`${import.meta.env.VITE_API_URI}/users/upload/story/${userDetails?.users?._id}`, formData, {
+            const response = await axios.put(`${import.meta.env.VITE_API_URI}/users/create/post/${userDetails?.users?._id}`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             toast.success(response.data.message || 'Uploded');
@@ -44,7 +44,7 @@ const PostTab = () => {
         }
         finally {
             setLoader(false);
-            dispatch(setAddStoryDialogBox(false));
+            dispatch(setPostDialogBox(false));
         }
     }
 
