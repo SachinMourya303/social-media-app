@@ -140,32 +140,32 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
   try {
     const { senderId, receiverId } = req.body;
 
-    const receiver = await userDetailsModel.findById(senderId);
-    const sender = await userDetailsModel.findById(receiverId);
+    const sender = await userDetailsModel.findById(senderId);
+    const receiver = await userDetailsModel.findById(receiverId);
 
     if (!sender || !receiver) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    receiver.following.push({
-      userId: sender._id,
-      email: sender.email,
-      connection: true,
-    });
-
-     await userDetailsModel.updateOne(
-      { _id: receiverId, "followers.userId": senderId },
-      { $set: { "followers.$.connection": true } }
-    );
-
-    sender.followers.push({
+    sender.following.push({
       userId: receiver._id,
       email: receiver.email,
       connection: true,
     });
 
+     await userDetailsModel.updateOne(
+      { _id: senderId, "followers.userId": receiverId },
+      { $set: { "followers.$.connection": true } }
+    );
+
+     receiver.followers.push({
+      userId: sender._id,
+      email: sender.email,
+      connection: true,
+    });
+
     await userDetailsModel.updateOne(
-      { _id: senderId, "following.userId": receiverId },
+      { _id: receiverId, "following.userId": senderId },
       { $set: { "following.$.connection": true } }
     );
 
