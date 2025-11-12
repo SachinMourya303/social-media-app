@@ -28,7 +28,7 @@ const Layout = () => {
   }, [userDetails, users, dispatch]);
 
   return (
-    <div className={darkmode ? 'bg-darkmode h-screen' : 'bg-gray-50 h-screen'}>
+    <div className={`h-screen overflow-hidden! ${darkmode ? 'bg-darkmode h-screen' : 'bg-gray-50 h-screen'}`}>
       <div>
         <PopupWrapper >
           <SearchTab />

@@ -36,7 +36,7 @@ const Story = () => {
   }
   return (
     <div>
-      <div className='relative ml-0 mt-5 md:mr-5'>
+      <div className='relative ml-0 md:mr-5'>
         <FeedsCardWrapper>
           <ScrollArea className='w-full'>
             <div className='flex items-center gap-2 w-[700px]'>

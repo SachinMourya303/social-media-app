@@ -10,6 +10,16 @@
   font-family: "Pacifico", cursive;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none; 
+}
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
