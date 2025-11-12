@@ -7,12 +7,13 @@ import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
-import { setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
+import { setPostDialogBox, setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
 
 
 const Navbar = () => {
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
+  const notification = useSelector((state) => state.users.notification);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -62,7 +63,7 @@ const Navbar = () => {
             </Link>
 
             <div className='flex items-center w-full justify-evenly'>
-              <CircleFadingPlus className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+              <CircleFadingPlus onClick={() => dispatch(setPostDialogBox(true))} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
 
               <BiSolidBrightnessHalf onClick={() => dispatch(setDarkMode(true))} className={`text-3xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
               <div className='relative'>
@@ -72,7 +73,7 @@ const Navbar = () => {
 
               <div className='relative'>
                 <Bell onClick={() => dispatch(setRightOutletBox('notification'))} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
-                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>{notification.length}</span>
               </div>
             </div>
           </div>
@@ -110,7 +111,7 @@ const Navbar = () => {
 
               <div className='relative'>
                 <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
-                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
+                <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>{notification.length}</span>
               </div>
             </div>
 
