@@ -153,25 +153,21 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
       connection: true,
     });
 
-    const existingReceiver = receiver.followers.find(
-      (f) => f.userId.toString() === senderId
+     await userDetailsModel.updateOne(
+      { _id: receiverId, "followers.userId": senderId },
+      { $set: { "followers.$.connection": true } }
     );
-    if (existingReceiver) {
-      existingReceiver.connection = true;
-    }
 
     sender.followers.push({
       userId: receiver._id,
       email: receiver.email,
-      connection: false,
+      connection: true,
     });
 
-    const existingSender = sender.following.find(
-      (f) => f.userId.toString() === receiverId
+    await userDetailsModel.updateOne(
+      { _id: senderId, "following.userId": receiverId },
+      { $set: { "following.$.connection": true } }
     );
-    if (existingSender) {
-      existingSender.connection = true;
-    }
 
     await sender.save();
     await receiver.save();
