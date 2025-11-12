@@ -146,37 +146,52 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const alreadyFollowing = sender.following.some(
-      (f) => f.userId.toString() === receiver._id.toString()
+    const existingFollowing = sender.following.find(
+      (f) => f.userId.toString() === receiverId
     );
-
-    if (!alreadyFollowing) {
+    if (existingFollowing) {
+      existingFollowing.connection = true;
+    } else {
       sender.following.push({
         userId: receiver._id,
         email: receiver.email,
         connection: true,
       });
-    } else {
-      sender.following = sender.following.map((f) =>
-        f.userId.toString() === receiver._id.toString()
-          ? { ...f, connection: true, email: receiver.email }
-          : f
-      );
     }
 
-    const updatedFollowers = receiver.followers.map((f) =>
-      f.userId.toString() === sender._id.toString()
-        ? { ...f, connection: true, email: sender.email }
-        : f
+    const existingFollower = sender.followers.find(
+      (f) => f.userId.toString() === receiverId
     );
+    if (existingFollower) {
+      existingFollower.connection = true;
+    }
 
-    receiver.followers = updatedFollowers;
+    const existingReceiverFollower = receiver.followers.find(
+      (f) => f.userId.toString() === senderId
+    );
+    if (existingReceiverFollower) {
+      existingReceiverFollower.connection = true;
+    } else {
+      receiver.followers.push({
+        userId: sender._id,
+        email: sender.email,
+        connection: true,
+      });
+    }
+
+    const existingReceiverFollowing = receiver.following.find(
+      (f) => f.userId.toString() === senderId
+    );
+    if (existingReceiverFollowing) {
+      existingReceiverFollowing.connection = true;
+    }
 
     await sender.save();
     await receiver.save();
 
     return res.status(200).json({ message: 'Follow confirmed successfully' });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ message: error.message });
   }
 });
