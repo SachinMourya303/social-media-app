@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Shortcuts = () => {
       const { userDetails, darkmode } = useSelector(state => state.userAuth);
+        const loggedUser = useSelector(state => state.users.loggedUser);
     const navigate = useNavigate();
     const followers = useSelector((state) => state.users.followers);
 
@@ -19,7 +20,7 @@ const Shortcuts = () => {
                 <hr className={`mt-3 ${darkmode ? 'border-t border-darkmode-text/50' : 'border-t border-gray-200'}`} />
                 <ScrollArea className='h-60 w-full cursor-pointer'>
                     <div className='flex flex-col items-start justify-start w-full'>
-                        {followers.map((user, index) => (
+                        {followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true)).map((user, index) => (
                             <div onClick={() => navigate(`/user/profile/${user?._id}`)} key={index} className='flex items-center justify-center gap-5 mt-3'>
 
                                 <figure className='w-12 h-12 rounded-full overflow-hidden'>

@@ -1,19 +1,26 @@
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const navigate = useNavigate();
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
+  const loggedUser = useSelector(state => state.users.loggedUser);
   const Posts = useSelector((state) => state.users.Posts);
   const followers = useSelector((state) => state.users.followers);
   const following = useSelector((state) => state.users.following);
+  const [fWCT, setFWCT] = useState([]);
+
+  useEffect(() => {
+    const followersWithConnectionTrue = followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true));
+    setFWCT(followersWithConnectionTrue);
+  }, [followers]);
 
   const userCredentails = [
     { credential: Posts?.length, credentialName: 'Post' },
-    { credential: followers.length, credentialName: 'Followers' },
+    { credential: fWCT.length, credentialName: 'Followers' },
     { credential: following.length, credentialName: 'Following' },
   ]
 
@@ -45,7 +52,7 @@ const Profile = () => {
       </div>
 
       <div className='flex w-full mt-3'>
-        <Button onClick={() => navigate(`/user/profile/${userDetails?.users?._id}`)}  className='flex-1 w-full bg-app-theme hover:bg-app-theme/80 cursor-pointer'>My Profile</Button>
+        <Button onClick={() => navigate(`/user/profile/${userDetails?.users?._id}`)} className='flex-1 w-full bg-app-theme hover:bg-app-theme/80 cursor-pointer'>My Profile</Button>
       </div>
     </div>
   )
