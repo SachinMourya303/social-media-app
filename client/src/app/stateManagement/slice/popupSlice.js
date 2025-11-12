@@ -4,6 +4,7 @@ const initialState = {
     addStoryDialogBox: false,
     storyDialogBox: false,
     searchDialogBox: false,
+    postDialogBox: true,
     loader: false,
     rightOutletBox: "chatpage",
 }
@@ -21,6 +22,9 @@ const popupSlice = createSlice({
         setSearchDialogBox: (state, action) => {
             state.searchDialogBox = action.payload;
         },
+        setPostDialogBox: (state, action) => {
+            state.postDialogBox = action.payload;
+        },
         setLoader: (state, action) => {
             state.loader = action.payload;
         },
@@ -30,5 +34,5 @@ const popupSlice = createSlice({
     }
 })
 
-export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox, setLoader , setRightOutletBox } = popupSlice.actions;
+export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox, setLoader , setRightOutletBox , setPostDialogBox } = popupSlice.actions;
 export default popupSlice.reducer;

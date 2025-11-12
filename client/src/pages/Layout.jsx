@@ -9,6 +9,7 @@ import SearchTab from '@/app/popups/SearchTab'
 import StoryTab from '@/app/popups/StoryTab'
 import { setLoggedUser } from '@/app/stateManagement/slice/usersSlice'
 import RightOutlet from '@/app/components/ChatPage/RightOutlet'
+import PostTab from '@/app/popups/PostTab'
 
 const Layout = () => {
   const { userDetails , darkmode } = useSelector(state => state.userAuth);
@@ -32,6 +33,7 @@ const Layout = () => {
         <PopupWrapper >
           <SearchTab />
           <StoryTab />
+          <PostTab />
         </PopupWrapper>
       </div>
       <div>
