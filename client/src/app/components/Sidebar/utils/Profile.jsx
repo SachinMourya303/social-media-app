@@ -7,20 +7,20 @@ import { useNavigate } from 'react-router-dom';
 const Profile = () => {
   const navigate = useNavigate();
   const { userDetails, darkmode } = useSelector(state => state.userAuth);
-  const loggedUser = useSelector(state => state.users.loggedUser);
-  const Posts = useSelector((state) => state.users.Posts);
+  const posts = useSelector((state) => state.users.posts);
   const followers = useSelector((state) => state.users.followers);
   const following = useSelector((state) => state.users.following);
-  const [fWCT, setFWCT] = useState([]);
+  const loggedUser = useSelector(state => state.users.loggedUser);
+  const [userPosts , setUserPosts] = useState([]);
 
   useEffect(() => {
-    const followersWithConnectionTrue = followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true));
-    setFWCT(followersWithConnectionTrue);
-  }, [followers]);
+    const filterUserPosts = posts?.posts?.filter((user) => user?.userId === loggedUser?._id);
+    setUserPosts(filterUserPosts)
+  }, [posts]);
 
   const userCredentails = [
-    { credential: Posts?.length, credentialName: 'Post' },
-    { credential: fWCT.length, credentialName: 'Followers' },
+    { credential: userPosts?.length, credentialName: 'Post' },
+    { credential: followers.length, credentialName: 'Followers' },
     { credential: following.length, credentialName: 'Following' },
   ]
 
