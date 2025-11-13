@@ -4,10 +4,10 @@ import { upload } from '../config/cloudinary.js';
 
 const postsRoutes = express.Router();
 
-postsRoutes.post('/create/:userId',
+postsRoutes.post('/create',
     upload.single('file'), async (req, res) => {
         try {
-            const { userId } = req.params;
+            const { userId } = req.body;
 
             if (!req.file) {
                 return res.status(400).json({ message: 'No file uploaded' });
