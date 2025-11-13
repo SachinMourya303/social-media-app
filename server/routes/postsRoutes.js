@@ -46,7 +46,7 @@ postsRoutes.post('/create',
     }
 );
 
-postsRoutes.get('allposts', async (req, res) => {
+postsRoutes.get('/allposts', async (req, res) => {
     try {
         const posts = await postsModel.find({});
         return res.status(200).json({ posts });
