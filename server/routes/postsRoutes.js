@@ -46,4 +46,13 @@ postsRoutes.post('/create',
     }
 );
 
+postsRoutes.get('allposts', async (req, res) => {
+    try {
+        const posts = await postsModel.find({});
+        return res.status(200).json({ posts });
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
+
 export default postsRoutes;
