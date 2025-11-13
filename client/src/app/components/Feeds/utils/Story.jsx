@@ -66,10 +66,10 @@ const Story = () => {
 
               <div className='flex items-center justify-center gap-2'>
                 {followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true)).map((user, index) => (
-                  <div onClick={() => navigate(`/stories/${user?._id}`)} key={index} className='flex flex-col w-15 items-center justify-center gap-2'>
+                  <div onClick={() => navigate(`/stories/${user?._id}`)} key={index} className={`${user?.storyFile?.url !== null ? 'flex' : 'hidden'} flex-col w-15 items-center justify-center gap-2`}>
 
                     <figure className='w-15 h-15 rounded-full overflow-hidden cursor-pointer'>
-                      {followers?.storyFile?.url !== null
+                      {user?.storyFile?.url !== null
                         ? (
                           <img src={user.profile} alt="profile" className='w-full h-full object-cover object-center' />
                         )
