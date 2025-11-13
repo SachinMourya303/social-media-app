@@ -11,10 +11,18 @@ import { setAddStoryDialogBox, setPostDialogBox } from '../stateManagement/slice
 const PostTab = () => {
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
     const postDialogBox = useSelector(state => state.popup.postDialogBox);
+        const loggedUser = useSelector(state => state.users.loggedUser);
     const [loader, setLoader] = useState(false);
     const [storyFile, setStoryFile] = useState(null);
     const [storyVideo, setStoryVideo] = useState(null);
-    const [storyData, setStoryData] = useState({ caption: "" });    
+    const [storyData, setStoryData] = useState(
+        { 
+            userId: "",
+            profile: "",
+            username: "",
+            email: "",
+            caption: "", 
+        });    
     
     const dispatch = useDispatch();
 
@@ -30,16 +38,20 @@ const PostTab = () => {
         if (!storyFile && !storyVideo) return toast.error("Please select a photo or video first");
         try {
             const formData = new FormData();
+            formData.append('userId', loggedUser._id);
+            formData.append('profile', loggedUser.profile);
+            formData.append('username', loggedUser.username);
+            formData.append('email', loggedUser.email);
             formData.append('file', storyFile || storyVideo);
             formData.append('caption', storyData.caption);
-            const response = await axios.put(`${import.meta.env.VITE_API_URI}/users/create/post/${userDetails?.users?._id}`, formData, {
+            const response = await axios.put(`${import.meta.env.VITE_API_URI}/post/create`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             toast.success(response.data.message || 'Uploded');
             setStoryFile(null);
             setStoryVideo(null);
         } catch (error) {
-            toast.error(error.response?.data?.message || "Failed to upload story");
+            toast.error(error.response?.data?.message || "Failed to upload post");
             console.log(error.message);
         }
         finally {
