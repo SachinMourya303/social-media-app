@@ -4,7 +4,7 @@ import { upload } from '../config/cloudinary.js';
 
 const postsRoutes = express.Router();
 
-postsRoutes.post('/create/post/:userId',
+postsRoutes.post('/create/:userId',
     upload.single('file'), async (req, res) => {
         try {
             const { userId } = req.params;
