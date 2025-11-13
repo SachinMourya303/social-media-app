@@ -10,28 +10,24 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 const UserProfilePage = () => {
     const users = useSelector(state => state.users.usersData);
-    const loggedUser = useSelector(state => state.users.loggedUser);
+    const navigate = useNavigate();
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
-
-    const posts = useSelector((state) => state.users.Posts);
+    const posts = useSelector((state) => state.users.posts);
     const followers = useSelector((state) => state.users.followers);
     const following = useSelector((state) => state.users.following);
-    const [fWCT, setFWCT] = useState([]);
+    const loggedUser = useSelector(state => state.users.loggedUser);
+    const [userPosts, setUserPosts] = useState([]);
 
     useEffect(() => {
-        const followersWithConnectionTrue = followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true));
-        setFWCT(followersWithConnectionTrue);
-    }, [followers]);
-
+        const filterUserPosts = posts?.posts?.filter((user) => user?.userId === loggedUser?._id);
+        setUserPosts(filterUserPosts)
+    }, [posts]);
 
     const userCredentails = [
-        { credential: posts?.length, credentialName: 'Post' },
-        { credential: fWCT.length, credentialName: 'Followers' },
+        { credential: userPosts?.length, credentialName: 'Post' },
+        { credential: followers.length, credentialName: 'Followers' },
         { credential: following.length, credentialName: 'Following' },
     ]
-
-    const navigate = useNavigate();
-
     const renderButton = () => {
         if (userDetails?.users?._id === userId) {
             return <div className='flex items-center justify-evenly w-full'>
@@ -75,6 +71,7 @@ const UserProfilePage = () => {
 
     return (
         <div className='mt-5 md:mr-5'>
+            <div className='h-[700px] w-full overflow-y-auto no-scrollbar'>
             <FeedsCardWrapper >
                 <div className='w-full flex flex-col items-center'>
                     <div className='flex justify-start w-full ml-[-20px]'>
@@ -108,6 +105,7 @@ const UserProfilePage = () => {
                     <UserPosts />
                 </div>
             </FeedsCardWrapper>
+            </div>
         </div>
     )
 }

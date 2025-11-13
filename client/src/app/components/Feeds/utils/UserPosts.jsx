@@ -3,26 +3,29 @@ import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 const UserPosts = () => {
-  const posts = useSelector((state) => state.users.Posts);
-  const { userId } = useParams();
-  const { userDetails, darkmode } = useSelector(state => state.userAuth);
-  const users = useSelector(state => state.users.usersData);
-  const findUser = users.find((user) => user._id === userId);
-  
+  const { darkmode } = useSelector(state => state.userAuth);
+  const loggedUser = useSelector(state => state.users.loggedUser);
+  const posts = useSelector(state => state.users.posts);
+const { userId } = useParams();
+  const postsArray = posts?.posts || [];
+  console.log(postsArray);
+
+
+  const filteredPosts = postsArray.filter(post => post.userId === userId);
+
+
   return (
     <div className='border-t w-full mt-5 pt-5'>
-      {
-        posts.length === 0
-          ? (
-            <div className='flex flex-wrap justify-between'>
-              <img src={findUser?.profile} alt="post" className='w-[200px] h-[200px] object-cover object-center'/>
-              <img src={findUser?.profile} alt="post" className='w-[200px] h-[200px] object-cover object-center'/>
-              <img src={findUser?.profile} alt="post" className='w-[200px] h-[200px] object-cover object-center'/>
-            </div>
-          ) : (
-            <div>No post yet</div>
-          )
-      }
+      <div className='flex gap-1 flex-wrap'>
+        {
+          filteredPosts.length > 0 ? (
+            filteredPosts.toReversed().map((post) => (
+              <figure className='w-[100px] h-[100px] md:w-[170px] md:h-[170px] xl:w-[230px] xl:h-[230px] mb-1'>
+                <img src={post?.url} alt="" className='h-full w-full object-cover object-center' />
+              </figure>
+            ))) : 'No post yet'
+        }
+      </div>
     </div>
   )
 }
