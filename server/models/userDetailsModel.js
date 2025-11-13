@@ -14,13 +14,6 @@ const userDetailsSchema = new mongoose.Schema({
         createdAt: { type: Date, default: Date.now },
     },
 
-    postFile: {
-        url: { type: String, default: null },
-        caption: { type: String, default: null },
-        type: { type: String, enum: ['image', 'video'], default: null },
-        createdAt: { type: Date, default: Date.now },
-    },
-
     followers: [
         {
             userId: { type: mongoose.Schema.Types.ObjectId, ref: "userDetailsModel" },

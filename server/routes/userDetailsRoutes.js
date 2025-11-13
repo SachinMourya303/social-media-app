@@ -173,47 +173,4 @@ userDetailsRoutes.put('/confirm/follow', async (req, res) => {
   }
 });
 
-userDetailsRoutes.put('/create/post/:userId',
-  upload.single('file'), async (req, res) => {
-    try {
-      const { userId } = req.params;
-
-      if (!req.file) {
-        return res.status(400).json({ message: 'No file uploaded' });
-      }
-
-      const fileType = req.file.mimetype?.startsWith('video') ? 'video' : 'image';
-      const caption = typeof req.body.caption === 'string' ? req.body.caption : null;
-
-      const updatedUser = await userDetailsModel.findByIdAndUpdate(
-        userId,
-        {
-          $set: {
-            'postFile.url': req.file.path,
-            'postFile.caption': caption || null,
-            'postFile.type': fileType,
-            'postFile.createdAt': new Date(),
-          }
-        },
-        { new: true, runValidators: true }
-      );
-
-
-      if (!updatedUser) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-
-      console.log('Story File being sent:', updatedUser.postFile);
-      return res.status(200).json({
-        message: 'Story uploaded successfully',
-        postFile: updatedUser.postFile,
-      });
-    } catch (error) {
-      console.error('Upload error:', error);
-      return res.status(500).json({ message: error.message });
-    }
-  }
-);
-
-
 export default userDetailsRoutes;
