@@ -1,5 +1,5 @@
 import Story from '@/app/components/Feeds/utils/Story'
-import { setIsLoading, setUsers } from '@/app/stateManagement/slice/usersSlice';
+import { setIsLoading, setPosts, setUsers } from '@/app/stateManagement/slice/usersSlice';
 import { Skeleton } from 'primereact/skeleton';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
@@ -10,6 +10,15 @@ import Posts from '@/app/components/Feeds/Posts';
 const FeedsPage = () => {
 
   const isLoading = useSelector(state => state.users.isLoading);
+  const dispatch = useDispatch();
+
+  const fetchAllPosts = async () => {
+    const response = await axios.get(`${import.meta.env.VITE_API_URI}/post/allposts`);
+    dispatch(setPosts(response.data));
+  }
+  useEffect(() => {
+    fetchAllPosts();
+  }, []);
 
   if (isLoading) return <div className='flex flex-col ml-5 xl:ml-0 md:mt-10 mr-5'>
     <div className='flex justify-start gap-3'>

@@ -11,19 +11,19 @@ import { setAddStoryDialogBox, setPostDialogBox } from '../stateManagement/slice
 const PostTab = () => {
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
     const postDialogBox = useSelector(state => state.popup.postDialogBox);
-        const loggedUser = useSelector(state => state.users.loggedUser);
+    const loggedUser = useSelector(state => state.users.loggedUser);
     const [loader, setLoader] = useState(false);
     const [storyFile, setStoryFile] = useState(null);
     const [storyVideo, setStoryVideo] = useState(null);
     const [storyData, setStoryData] = useState(
-        { 
+        {
             userId: "",
             profile: "",
             username: "",
             email: "",
-            caption: "", 
-        });    
-    
+            caption: "",
+        });
+
     const dispatch = useDispatch();
 
     const onCaptionChange = (e) => {
