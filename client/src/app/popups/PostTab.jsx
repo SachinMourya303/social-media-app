@@ -44,7 +44,7 @@ const PostTab = () => {
             formData.append('email', loggedUser.email);
             formData.append('file', storyFile || storyVideo);
             formData.append('caption', storyData.caption);
-            const response = await axios.put(`${import.meta.env.VITE_API_URI}/post/create`, formData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URI}/post/create`, formData, {
                 headers: { "Content-Type": "multipart/form-data" }
             });
             toast.success(response.data.message || 'Uploded');
