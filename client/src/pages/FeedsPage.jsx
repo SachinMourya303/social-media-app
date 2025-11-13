@@ -10,15 +10,18 @@ import Posts from '@/app/components/Feeds/Posts';
 const FeedsPage = () => {
 
   const isLoading = useSelector(state => state.users.isLoading);
+  const loggedUser = useSelector(state => state.users.loggedUser);
+  const posts = useSelector(state => state.users.posts);
   const dispatch = useDispatch();
 
-  const fetchAllPosts = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URI}/post/allposts`);
-    dispatch(setPosts(response.data));
-  }
   useEffect(() => {
+    const fetchAllPosts = async () => {
+      const response = await axios.get(`${import.meta.env.VITE_API_URI}/post/allposts`);
+      dispatch(setPosts(response.data));
+    };
     fetchAllPosts();
-  }, []);
+  }, [posts]);
+
 
   if (isLoading) return <div className='flex flex-col ml-5 xl:ml-0 md:mt-10 mr-5'>
     <div className='flex justify-start gap-3'>
