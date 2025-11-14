@@ -8,6 +8,14 @@ const postsSchema = new mongoose.Schema({
     email: { type: String, required: true },
     url: { type: String, default: null },
     caption: { type: String, default: null },
+    comments: [
+        {
+            profile: { type: String },
+            username: { type: String },
+            comment: { type: String },
+            createdAt: { type: Date, default: Date.now }
+        }
+    ],
     type: { type: String, enum: ['image', 'video'], default: null },
 }, {
     timestamps: true,

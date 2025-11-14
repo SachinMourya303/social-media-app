@@ -55,4 +55,26 @@ postsRoutes.get('/allposts', async (req, res) => {
     }
 })
 
+postsRoutes.put('/comments', async (req, res) => {
+    try {
+        const { postId, profile, username, comment } = req.body;
+
+        const updatedPost = await postsModel.findByIdAndUpdate(
+            postId,
+            {
+                $push: {
+                    comments: { profile, username, comment }
+                }
+            },
+            { new: true }
+        );
+
+        return res.status(200).json(updatedPost);
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+});
+
+
 export default postsRoutes;
