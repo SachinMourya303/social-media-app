@@ -1,14 +1,16 @@
 import FeedsCardWrapper from '@/app/ReusableComponents/FeedsCardWrapper'
+import { setPreviewPostBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { EllipsisVertical, Heart, MessageSquare } from 'lucide-react';
 import React from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Posts = () => {
     const { darkmode } = useSelector(state => state.userAuth);
     const loggedUser = useSelector(state => state.users.loggedUser);
     const posts = useSelector(state => state.users.posts);
+    const dispatch = useDispatch();
 
     const postsArray = posts?.posts || [];
 
@@ -84,7 +86,7 @@ const Posts = () => {
                                             <Heart className='size-5' />100
                                         </Button>
 
-                                        <Button className='bg-transparent p-0! m-0! text-gray-300 hover:text-red-500 cursor-pointer hover:bg-transparent'>
+                                        <Button onClick={() => dispatch(setPreviewPostBox(post?._id))} className='bg-transparent p-0! m-0! text-gray-300 hover:text-red-500 cursor-pointer hover:bg-transparent'>
                                             <MessageSquare className='size-5' />100
                                         </Button>
                                     </figcaption>

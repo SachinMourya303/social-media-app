@@ -7,6 +7,7 @@ const initialState = {
     postDialogBox: false,
     loader: false,
     rightOutletBox: "chatpage",
+    previewPostBox: false,
 }
 
 const popupSlice = createSlice({
@@ -31,8 +32,11 @@ const popupSlice = createSlice({
         setRightOutletBox: (state, action) => {
             state.rightOutletBox = action.payload;
         },
+         setPreviewPostBox: (state, action) => {
+            state.previewPostBox = action.payload;
+        },
     }
 })
 
-export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox, setLoader , setRightOutletBox , setPostDialogBox } = popupSlice.actions;
+export const { setStoryDialogBox, setSearchDialogBox, setAddStoryDialogBox, setLoader , setRightOutletBox , setPostDialogBox , setPreviewPostBox } = popupSlice.actions;
 export default popupSlice.reducer;

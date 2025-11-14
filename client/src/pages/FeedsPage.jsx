@@ -32,11 +32,29 @@ const FeedsPage = () => {
       <Skeleton className='w-15! h-15! rounded-full! hidden md:flex' />
       <Skeleton className='w-15! h-15! rounded-full! hidden md:flex' />
     </div>
+
+    <div className='mt-10'>
+      <div className="flex mb-3">
+        <Skeleton shape="circle" size="4rem" className="mr-2"></Skeleton>
+        <div>
+          <Skeleton width="10rem" className="mb-2"></Skeleton>
+          <Skeleton width="5rem" className="mb-2"></Skeleton>
+          <Skeleton height=".5rem"></Skeleton>
+        </div>
+      </div>
+      <Skeleton className='mt-5' width="100%" height="100px"></Skeleton>
+      <Skeleton className='mt-5' width="100%" height="100px"></Skeleton>
+      <Skeleton className='mt-5' width="100%" height="100px"></Skeleton>
+      <div className="flex justify-content-between mt-3">
+        <Skeleton width="4rem" height="2rem"></Skeleton>
+        <Skeleton width="4rem" height="2rem"></Skeleton>
+      </div>
+    </div>
   </div>
 
   return (
     <div className='overflow-hidden'>
-      <div className='h-[700px] w-full overflow-y-auto no-scrollbar mt-5'>
+      <div className='h-[700px] md:h-[1300px] xl:h-[700px] 2xl:h-[1300px] w-full overflow-y-auto no-scrollbar mt-5'>
         <Story />
         <Posts />
       </div>
