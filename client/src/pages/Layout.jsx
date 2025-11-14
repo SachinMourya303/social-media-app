@@ -8,7 +8,7 @@ import PopupWrapper from '@/app/ReusableComponents/PopupWrapper'
 import SearchTab from '@/app/popups/SearchTab'
 import StoryTab from '@/app/popups/StoryTab'
 import { setLoggedUser } from '@/app/stateManagement/slice/usersSlice'
-import RightOutlet from '@/app/components/ChatPage/RightOutlet'
+import RightOutlet from '@/pages/RightOutlet'
 import PostTab from '@/app/popups/PostTab'
 import PreviewPosts from '@/app/popups/PreviewPosts'
 

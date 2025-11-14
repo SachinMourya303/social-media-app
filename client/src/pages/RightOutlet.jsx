@@ -1,7 +1,7 @@
+import ChatPage from '@/app/components/ChatPage/ChatPage'
+import NotificationPage from '@/app/components/Notificationpage/NotificationPage'
 import FeedsCardWrapper from '@/app/ReusableComponents/FeedsCardWrapper'
 import { setNotification } from '@/app/stateManagement/slice/usersSlice'
-import Chatpage from '@/pages/Chatpage'
-import NotificationPage from '@/pages/NotificationPage'
 import { Skeleton } from 'primereact/skeleton'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
@@ -66,7 +66,7 @@ const RightOutlet = () => {
     <div className='mr-5 mt-5'>
       {rightOutletBox === 'chatpage' ?
         <FeedsCardWrapper >
-          <Chatpage />
+          <ChatPage />
         </FeedsCardWrapper>
         : ''}
       {rightOutletBox === 'notification' ?
