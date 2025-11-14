@@ -16,7 +16,7 @@ import StoryPreview from './pages/StoryPreview';
 import RightOutlet from './pages/RightOutlet';
 import NotificationPage from './app/components/Notificationpage/NotificationPage';
 import ChatPage from './app/components/ChatPage/ChatPage';
-import UserChats from './app/components/ChatPage/utils/userChats';
+import UserChats from './app/components/ChatPage/utils/UserChats';
 
 const App = () => {
   const dispatch = useDispatch();
