@@ -8,6 +8,13 @@ const postsSchema = new mongoose.Schema({
     email: { type: String, required: true },
     url: { type: String, default: null },
     caption: { type: String, default: null },
+    likes: [
+        {
+            profile: { type: String },
+            username: { type: String },
+            createdAt: { type: Date, default: Date.now }
+        }
+    ],
     comments: [
         {
             profile: { type: String },

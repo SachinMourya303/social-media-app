@@ -69,12 +69,31 @@ postsRoutes.put('/comments', async (req, res) => {
             { new: true }
         );
 
-        return res.status(200).json(updatedPost);
+        return res.status(200).json({ message: "Comment added" , updatedPost });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
 });
+
+postsRoutes.put('/likes', async (req, res) => {
+    try {
+        const { postId, profile, username } = req.body;
+        const updatedLikes = await postsModel.findByIdAndUpdate(
+            postId,
+            {
+                $push: {
+                    likes: { profile, username }
+                }
+            },
+            { new: true }
+        );
+        return res.status(200).json(updatedLikes);
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
 
 
 export default postsRoutes;
