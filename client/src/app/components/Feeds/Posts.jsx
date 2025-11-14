@@ -3,7 +3,7 @@ import { setPreviewPostBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { EllipsisVertical, Heart, MessageSquare } from 'lucide-react';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const Posts = () => {
@@ -81,13 +81,14 @@ const Posts = () => {
                                         <img src={post?.url} alt="post" className='w-full h-full object-cover object-center' />
                                     </figure>
                                     <hr className={`w-full mt-5 border-[1.5px] border-t ${darkmode ? 'border-darkmode-text/20' : 'border-gray-200'}`} />
-                                    <figcaption className='mt-2 w-full flex items-center gap-3'>
-                                        <Button className='bg-transparent p-0! m-0! text-gray-300 hover:text-red-500 cursor-pointer hover:bg-transparent'>
-                                            <Heart className='size-5' />100
+                                    <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{post?.caption}</div>
+                                    <figcaption className='w-full flex items-center gap-3'>
+                                        <Button className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
+                                            <Heart className='size-5' />
                                         </Button>
 
-                                        <Button onClick={() => dispatch(setPreviewPostBox(post?._id))} className='bg-transparent p-0! m-0! text-gray-300 hover:text-red-500 cursor-pointer hover:bg-transparent'>
-                                            <MessageSquare className='size-5' />100
+                                        <Button onClick={() => dispatch(setPreviewPostBox(post?._id))} className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
+                                            <MessageSquare className='size-5' />
                                         </Button>
                                     </figcaption>
                                 </div>
