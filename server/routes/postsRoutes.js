@@ -58,18 +58,18 @@ postsRoutes.get('/allposts', async (req, res) => {
 postsRoutes.delete('/delete', async (req, res) => {
     try {
         const { postId } = req.body;
-        if (!postId) {
+
+        const deletedPost = await postsModel.findByIdAndDelete(postId);
+
+        if (!deletedPost) {
             return res.status(404).json({ message: 'Post not found' });
         }
 
-        const deletePost = await postsModel.findByIdAndDelete(postId);
-        await postsModel.save();
-        return res.status(404).json({ message: 'Post deleted' , deletePost });
-
+        return res.status(200).json({ message: 'Post deleted', deletedPost });
     } catch (error) {
         return res.status(500).json({ message: error.message });
     }
-})
+});
 
 postsRoutes.put('/comments', async (req, res) => {
     try {
