@@ -16,6 +16,7 @@ import StoryPreview from './pages/StoryPreview';
 import RightOutlet from './pages/RightOutlet';
 import NotificationPage from './app/components/Notificationpage/NotificationPage';
 import ChatPage from './app/components/ChatPage/ChatPage';
+import UserChats from './app/components/ChatPage/utils/userChats';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -78,6 +79,7 @@ const App = () => {
         <Route path='right-outlet' element={<RightOutlet />} >
           <Route index element={<ChatPage />} />
           <Route path='notification' element={<NotificationPage />} />
+          <Route path='message' element={<UserChats />} />
         </Route>
       </Routes>
 

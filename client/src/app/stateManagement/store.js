@@ -8,13 +8,13 @@ import popupReducer from './slice/popupSlice';
 const authPersistConfig = {
   key: 'userAuth',
   storage,
-  whitelist: ['userToken', 'userDetails' , 'darkmode'],
+  whitelist: ['userToken', 'userDetails' , 'darkmode' , 'rightOutletBox' , 'messageId'],
 };
 
 const rootReducer = combineReducers({
   userAuth: persistReducer(authPersistConfig, authReducer),
   users: usersReducer, 
-  popup: popupReducer,
+  popup: persistReducer(authPersistConfig, popupReducer),
 });
 
 export const store = configureStore({

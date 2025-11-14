@@ -1,4 +1,5 @@
 import ChatPage from '@/app/components/ChatPage/ChatPage'
+import UserChats from '@/app/components/ChatPage/utils/userChats'
 import NotificationPage from '@/app/components/Notificationpage/NotificationPage'
 import FeedsCardWrapper from '@/app/ReusableComponents/FeedsCardWrapper'
 import { setNotification } from '@/app/stateManagement/slice/usersSlice'
@@ -72,6 +73,11 @@ const RightOutlet = () => {
       {rightOutletBox === 'notification' ?
         <FeedsCardWrapper >
           <NotificationPage />
+        </FeedsCardWrapper>
+        : ''}
+      {rightOutletBox === 'message' ?
+        <FeedsCardWrapper >
+          <UserChats />
         </FeedsCardWrapper>
         : ''}
     </div>

@@ -20,7 +20,7 @@ const Shortcuts = () => {
                 <ScrollArea className='h-60 w-full cursor-pointer'>
                     <div className='flex flex-col items-start justify-start w-full'>
                         {followers.map((user, index) => (
-                            <div onClick={() => navigate(`/user/profile/${user?._id}`)} key={index} className='flex items-center justify-center gap-5 mt-3'>
+                            <div onClick={() => navigate(`/user/profile/${user?._id}`)} key={index} className={`flex items-center gap-5 mt-3 ${darkmode ? 'hover:bg-gray-600' : 'hover:bg-gray-100'} w-full rounded-lg`}>
 
                                 <figure className='w-12 h-12 rounded-full overflow-hidden'>
                                     {user?.profile !== null
