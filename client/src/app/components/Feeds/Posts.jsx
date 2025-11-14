@@ -28,9 +28,9 @@ const Posts = () => {
         ...postsArray.filter(post => post.userId === loggedUser?._id)
     ];
 
-    const userId = loggedUser._id;
-    const profile = loggedUser.profile;
-    const username = loggedUser.username;
+    const userId = loggedUser?._id;
+    const profile = loggedUser?.profile;
+    const username = loggedUser?.username;
     const likesService = async (postId) => {
         await sendLikesRequest(dispatch, postId, userId, profile, username);
     }
@@ -95,7 +95,7 @@ const Posts = () => {
                                     <figcaption className='w-full flex items-center gap-3'>
                                         <Button onClick={() => likesService(post._id)} className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
                                             <Heart className='size-5' />
-                                            <span>{followButtonLoading ? <Spinner /> : 0}</span>
+                                            <span>{followButtonLoading ? <Spinner /> : post?.likes.length}</span>
                                         </Button>
 
                                         <Button onClick={() => dispatch(setPreviewPostBox(post?._id))} className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
