@@ -55,6 +55,22 @@ postsRoutes.get('/allposts', async (req, res) => {
     }
 })
 
+postsRoutes.delete('/delete', async (req, res) => {
+    try {
+        const { postId } = req.body;
+        if (!postId) {
+            return res.status(404).json({ message: 'Post not found' });
+        }
+
+        const deletePost = await postsModel.findByIdAndDelete(postId);
+        await postsModel.save();
+        return res.status(404).json({ message: 'Post deleted' , deletePost });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
+
 postsRoutes.put('/comments', async (req, res) => {
     try {
         const { postId, profile, username, comment } = req.body;
@@ -69,7 +85,7 @@ postsRoutes.put('/comments', async (req, res) => {
             { new: true }
         );
 
-        return res.status(200).json({ message: "Comment added" , updatedPost });
+        return res.status(200).json({ message: "Comment added", updatedPost });
 
     } catch (error) {
         return res.status(500).json({ message: error.message });
