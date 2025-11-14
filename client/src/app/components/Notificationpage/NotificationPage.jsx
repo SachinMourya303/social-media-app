@@ -46,7 +46,6 @@ const NotificationPage = () => {
 
                             <div className='flex gap-1 justify-center items-center'>
                                 <Button onClick={() => followBackService(tofollow._id)} className='px-1 cursor-pointer'>{followButtonLoading ? <Spinner /> : 'Confirm'}</Button>
-                                <Button className={`bg-transparent hover:bg-transparent cursor-pointer  ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} px-1`}>Delete</Button>
                             </div>
                         </div>
                     </div>
