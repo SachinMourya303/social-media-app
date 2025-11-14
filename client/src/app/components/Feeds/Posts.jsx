@@ -2,6 +2,8 @@ import FeedsCardWrapper from '@/app/ReusableComponents/FeedsCardWrapper'
 import { setPreviewPostBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
+import { Spinner } from '@/components/ui/spinner';
+import { sendLikesRequest } from '@/utils/likeService';
 import { EllipsisVertical, Heart, MessageSquare } from 'lucide-react';
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -10,6 +12,7 @@ const Posts = () => {
     const { darkmode } = useSelector(state => state.userAuth);
     const loggedUser = useSelector(state => state.users.loggedUser);
     const posts = useSelector(state => state.users.posts);
+    const followButtonLoading = useSelector(state => state.users.followButtonLoading);
     const dispatch = useDispatch();
 
     const postsArray = posts?.posts || [];
@@ -24,6 +27,13 @@ const Posts = () => {
         ...filteredPosts,
         ...postsArray.filter(post => post.userId === loggedUser?._id)
     ];
+
+    const userId = loggedUser._id;
+    const profile = loggedUser.profile;
+    const username = loggedUser.username;
+    const likesService = async (postId) => {
+        await sendLikesRequest(dispatch, postId, userId, profile, username);
+    }
 
     return (
         <div className='mt-5 md:mr-5'>
@@ -83,8 +93,9 @@ const Posts = () => {
                                     <hr className={`w-full mt-5 border-[1.5px] border-t ${darkmode ? 'border-darkmode-text/20' : 'border-gray-200'}`} />
                                     <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{post?.caption}</div>
                                     <figcaption className='w-full flex items-center gap-3'>
-                                        <Button className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
+                                        <Button onClick={() => likesService(post._id)} className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
                                             <Heart className='size-5' />
+                                            <span>{followButtonLoading ? <Spinner /> : 0}</span>
                                         </Button>
 
                                         <Button onClick={() => dispatch(setPreviewPostBox(post?._id))} className='bg-transparent p-0! m-0! text-gray-500 hover:text-red-500 cursor-pointer hover:bg-transparent'>
