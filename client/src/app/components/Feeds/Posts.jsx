@@ -3,6 +3,7 @@ import { setPreviewPostBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
+import { sendDeletePostRequest } from '@/utils/deletePost';
 import { sendLikesRequest } from '@/utils/likeService';
 import { EllipsisVertical, Heart, MessageSquare } from 'lucide-react';
 import React, { useEffect } from 'react'
@@ -33,6 +34,10 @@ const Posts = () => {
     const username = loggedUser?.username;
     const likesService = async (postId) => {
         await sendLikesRequest(dispatch, postId, userId, profile, username);
+    }
+
+    const deletePost = async (postId) => {
+        await sendDeletePostRequest(dispatch, postId);
     }
 
     return (
@@ -74,16 +79,18 @@ const Posts = () => {
                                         </figcaption>
                                     </div>
 
-                                    <div className='relative cursor-pointer group'>
-                                        <EllipsisVertical className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
-                                        <div>
-                                            <div className={`absolute hidden group-hover:flex flex-col top-6 right-0 rounded-tr ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
-                                                <Button className={`bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>Delete</Button>
-                                                <hr className='border-t border-gray-300' />
-                                                <Button className={`bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>Hide</Button>
+                                    {loggedUser?._id === post?.userId &&
+                                        <div className='relative cursor-pointer group'>
+                                            <EllipsisVertical className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
+                                            <div>
+                                                <div className={`absolute hidden group-hover:flex flex-col top-6 right-0 rounded-tr ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
+                                                    <Button onClick={() => deletePost(post?._id)} className={`bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>
+                                                        <span>{followButtonLoading ? <Spinner /> : 'Delete'}</span>
+                                                    </Button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    }
                                 </div>
 
                                 <div className='mt-5'>
