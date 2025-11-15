@@ -8,7 +8,7 @@ import popupReducer from './slice/popupSlice';
 const authPersistConfig = {
   key: 'userAuth',
   storage,
-  whitelist: ['userToken', 'userDetails' , 'darkmode' , 'rightOutletBox' , 'messageId'],
+  whitelist: ['userToken', 'userDetails' , 'darkmode' , 'rightOutletBox' , 'messageId' , 'activePage'],
 };
 
 const rootReducer = combineReducers({

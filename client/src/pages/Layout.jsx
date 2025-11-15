@@ -13,11 +13,12 @@ import PostTab from '@/app/popups/PostTab'
 import PreviewPosts from '@/app/popups/PreviewPosts'
 
 const Layout = () => {
-  const { userDetails , darkmode } = useSelector(state => state.userAuth);
+  const { userDetails, darkmode } = useSelector(state => state.userAuth);
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.users.usersData);  
+  const users = useSelector((state) => state.users.usersData);
+  const activePage = useSelector((state) => state.popup.activePage);
 
-   useEffect(() => {
+  useEffect(() => {
     if (userDetails?.users?._id && users?.length > 0) {
       const fetchLoggedUser = users.find(
         (loggedU) => loggedU._id === userDetails.users._id
@@ -43,7 +44,9 @@ const Layout = () => {
       </div>
       <div className='grid grid-cols-1 md:grid-cols-[0fr_2fr_1fr]  xl:grid-cols-[0.7fr_2fr_1fr]'>
         <SideBar />
-        <Outlet />
+        <div className={`${activePage === "rightOutlet" && 'hidden md:flex'}`}>
+          <Outlet />
+        </div>
         <RightOutlet />
       </div>
     </div>

@@ -1,7 +1,9 @@
+import { setActivePage } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { acceptFollowRequest } from '@/utils/followBackService';
+import { ChevronLeft } from 'lucide-react';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -18,11 +20,13 @@ const NotificationPage = () => {
 
     return (
         <div className='w-full'>
-            <div className='mb-2'>
-                <strong className={`${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'}`}>Notification</strong>
-                <hr className='mt-2' />
+            <div className='flex items-center justify-between w-full'>
+                <strong className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>Notification</strong>
+                <Button onClick={() => dispatch(setActivePage(''))} className={`bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
+                    <ChevronLeft className='size-7' />
+                </Button>
             </div>
-
+            <hr className={`mt-3 ${darkmode ? 'border-t border-darkmode-text/50' : 'border-t border-gray-200'}`} />
             <div>
                 {notification.map((tofollow) => (
                     <div key={tofollow._id} className='my-3'>

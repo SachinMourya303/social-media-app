@@ -64,7 +64,7 @@ const RightOutlet = () => {
   </div>
 
   return (
-    <div className='mr-5 mt-5'>
+    <div className='md:mr-5 mt-5'>
       {rightOutletBox === 'chatpage' ?
         <FeedsCardWrapper >
           <ChatPage />

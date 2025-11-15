@@ -7,7 +7,7 @@ import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
-import { setPostDialogBox, setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
+import { setActivePage, setPostDialogBox, setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
 
 
 
@@ -21,12 +21,12 @@ const Navbar = () => {
   const [active, setActive] = useState('Home');
 
   const menuList = [
-    { title: 'Home', clickFunction: () => { navigate('/'); setMenu(false); setActive('Home') }, icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
+    { title: 'Home', clickFunction: () => { navigate('/'); setMenu(false); setActive('Home'); dispatch(setActivePage('')); }, icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Search', clickFunction: () => { navigate('/'); setMenu(false); setActive('Search'); dispatch(setSearchDialogBox(true)) }, icon: <SearchIcon className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Create', clickFunction: () => { navigate('/'); setMenu(false); setActive('Create'); dispatch(setPostDialogBox(true)) }, icon: <CircleFadingPlus className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Theme', clickFunction: () => { dispatch(setDarkMode(true)); setMenu(false); setActive('Theme') }, icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message'); dispatch(setRightOutletBox('chatpage')) }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification'); dispatch(setRightOutletBox('notification')); }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
+    { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message'); dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('chatpage')) }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
+    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification'); dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('notification')); }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
   ]
 
   const isLoading = useSelector(state => state.users.isLoading);
