@@ -5,8 +5,8 @@ import { Button } from '@/components/ui/button';
 import { Spinner } from '@/components/ui/spinner';
 import { sendDeletePostRequest } from '@/utils/deletePost';
 import { sendLikesRequest } from '@/utils/likeService';
-import { EllipsisVertical, Heart, MessageSquare } from 'lucide-react';
-import React, { useEffect } from 'react'
+import { EllipsisVertical, Heart, MessageSquare, X } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const Posts = () => {
@@ -15,6 +15,7 @@ const Posts = () => {
     const posts = useSelector(state => state.users.posts);
     const followButtonLoading = useSelector(state => state.users.followButtonLoading);
     const dispatch = useDispatch();
+    const [deleteBtn, setDeleteBtn] = useState(false);
 
     const postsArray = posts?.posts || [];
 
@@ -80,14 +81,19 @@ const Posts = () => {
                                     </div>
 
                                     {loggedUser?._id === post?.userId &&
-                                        <div className='relative cursor-pointer group'>
-                                            <EllipsisVertical className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
+                                        <div className='relative cursor-pointer'>
+                                            <EllipsisVertical onClick={() => setDeleteBtn(true)} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
                                             <div>
-                                                <div className={`absolute hidden group-hover:flex flex-col top-6 right-0 rounded-tr ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
-                                                    <Button onClick={() => deletePost(post?._id)} className={`bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>
-                                                        <span>{followButtonLoading ? <Spinner /> : 'Delete'}</span>
-                                                    </Button>
-                                                </div>
+                                                {deleteBtn &&
+                                                    <div className={`absolute flex top-6 right-0 rounded-tr ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
+                                                        <Button onClick={() => deletePost(post?._id)} className={`bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>
+                                                            <span className='text-red-500'>{followButtonLoading ? <Spinner /> : 'Delete'}</span>
+                                                        </Button>
+                                                        <Button onClick={() => setDeleteBtn(false)} className={`bg-transparent hover:bg-transparent cursor-pointer  ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
+                                                            <X />
+                                                        </Button>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     }
