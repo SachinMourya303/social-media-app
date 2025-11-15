@@ -22,7 +22,7 @@ const NotificationPage = () => {
         <div className='w-full'>
             <div className='flex items-center justify-between w-full'>
                 <strong className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>Notification</strong>
-                <Button onClick={() => dispatch(setActivePage(''))} className={`bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
+                <Button onClick={() => dispatch(setActivePage(''))} className={`bg-transparent flex md:hidden hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
                     <ChevronLeft className='size-7' />
                 </Button>
             </div>
