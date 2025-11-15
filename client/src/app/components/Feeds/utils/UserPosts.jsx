@@ -20,7 +20,7 @@ const { userId } = useParams();
         {
           filteredPosts.length > 0 ? (
             filteredPosts.toReversed().map((post) => (
-              <figure className='w-[100px] h-[100px] md:w-[170px] md:h-[170px] xl:w-[230px] xl:h-[230px] mb-1'>
+              <figure key={post} className='w-[100px] h-[100px] md:w-[170px] md:h-[170px] xl:w-[230px] xl:h-[230px] mb-1'>
                 <img src={post?.url} alt="" className='h-full w-full object-cover object-center' />
               </figure>
             ))) : 'No post yet'
