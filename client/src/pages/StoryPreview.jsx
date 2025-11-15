@@ -54,7 +54,7 @@ const StoryPreview = () => {
               <p className='w-full py-2 text-center'>{findUser?.storyFile?.caption}</p>
             </span>
           </div>
-          : <video src={findUser?.storyFile?.url} alt='story' autoPlay muted playsInline loop className='w-full h-full object-cover object-center' />
+          : <video src={findUser?.storyFile?.url} alt='story' autoPlay playsInline loop className='w-full h-full object-cover object-center' />
         }
 
         <div className='absolute flex items-center w-full justify-between top-5 left-0 md:top-10 md:px-10 h-10'>
