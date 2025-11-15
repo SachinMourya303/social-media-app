@@ -89,11 +89,11 @@ userDetailsRoutes.put('/delete/story/:userId', async (req, res) => {
     const { userId } = req.params;
     const updated = await userDetailsModel.findByIdAndUpdate(
       userId,
-      { 
-        $set: { 
-          'storyFile.url': null, 
-          'storyFile.caption': null 
-        } 
+      {
+        $set: {
+          'storyFile.url': null,
+          'storyFile.caption': null
+        }
       },
       { new: true }
     );
@@ -114,6 +114,7 @@ userDetailsRoutes.put('/following', async (req, res) => {
 
     const sender = await userDetailsModel.findById(senderId);
     const receiver = await userDetailsModel.findById(receiverId);
+
     sender.following.push({
       userId: receiver._id,
       email: receiver.email,
@@ -129,9 +130,46 @@ userDetailsRoutes.put('/following', async (req, res) => {
     await sender.save();
     await receiver.save();
 
-    return res.status(200).json({ message: 'Followed' });
+    return res.status(200).json({ message: 'Requested' });
   } catch (error) {
     return res.status(500).json({ message: error.message });
+  }
+});
+
+userDetailsRoutes.put('/confirm/follow', async (req, res) => {
+  try {
+    const { senderId, receiverId } = req.body;
+    const sender = await userDetailsModel.findById(senderId);
+    const receiver = await userDetailsModel.findById(receiverId);
+
+    if (!sender || !receiver) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    await Promise.all([
+      userDetailsModel.updateOne(
+        { _id: senderId, "followers.userId": receiverId },
+        { $set: { "followers.$.connection": true } }
+      ),
+      userDetailsModel.updateOne(
+        { _id: receiverId, "following.userId": senderId },
+        { $set: { "following.$.connection": true } }
+      )
+    ]);
+
+    if (!sender.following.some(f => f.userId.toString() === receiverId)) {
+      sender.following.push({ userId: receiver._id, email: receiver.email, connection: true });
+    }
+    if (!receiver.followers.some(f => f.userId.toString() === senderId)) {
+      receiver.followers.push({ userId: sender._id, email: sender.email, connection: true });
+    }
+
+    await Promise.all([sender.save(), receiver.save()]);
+
+    res.status(200).json({ message: 'Following' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
   }
 });
 
