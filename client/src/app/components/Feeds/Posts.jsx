@@ -100,8 +100,12 @@ const Posts = () => {
                                 </div>
 
                                 <div className='mt-5'>
-                                    <figure>
-                                        <img src={post?.url} alt="post" className='w-full h-full object-cover object-center' />
+                                    <figure onClick={() => dispatch(setPreviewPostBox(post?._id))}>
+                                        {
+                                            post?.type === 'image'
+                                            ? <img src={post?.url} alt="post" className='w-full h-full object-cover object-center' />
+                                            : <video src={post?.url} className='w-full h-full object-cover object-center' autoPlay playsInline loop />
+                                        }
                                     </figure>
                                     <hr className={`w-full mt-5 border-[1.5px] border-t ${darkmode ? 'border-darkmode-text/20' : 'border-gray-200'}`} />
                                     <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{post?.caption}</div>
