@@ -18,7 +18,9 @@ const UserChats = () => {
 
     const userMessage = followers.filter((user) => user._id === messageId);
     const roomId = messageId;
-
+    console.log("Room:" ,roomId);
+    console.log("User" ,userDetails?.users?._id);
+    console.log("Message" ,messageId);
 
     const [message, setMessage] = useState("");
     const senderId = userDetails?.users._id;
@@ -34,7 +36,7 @@ const UserChats = () => {
     console.log(chat);
 
     const fetchMessage = async () => {
-        await fetchMessageRequest(dispatch, setChat, roomId);
+        await fetchMessageRequest(dispatch, setChat, messageId);
     }
 
     useEffect(() => {
@@ -67,7 +69,7 @@ const UserChats = () => {
 
             <div className='w-full h-full'>
                 {
-                    chat?.users?.senderId || chat?.users?.receiverId === roomId
+                    chat?.roomId === roomId
                         ? <div className='w-full h-full'>
                             {
                                 chat?.messages.map((c , i) => (
