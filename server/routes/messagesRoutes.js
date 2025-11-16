@@ -33,7 +33,7 @@ messageRoutes.post("/send", async (req, res) => {
 
 messageRoutes.get('/chatroom' , async (req , res) => {
     try {
-        const { roomId } = req.body;
+        const { roomId } = req.query;
 
         if(!roomId){
             return res.status(404).json({ message: "Enter room id first!" });
