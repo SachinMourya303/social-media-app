@@ -8,6 +8,7 @@ import { sendLikesRequest } from '@/utils/likeService';
 import { EllipsisVertical, Heart, MessageSquare, X } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const Posts = () => {
     const { darkmode } = useSelector(state => state.userAuth);
@@ -16,6 +17,7 @@ const Posts = () => {
     const followButtonLoading = useSelector(state => state.users.followButtonLoading);
     const dispatch = useDispatch();
     const [deleteBtn, setDeleteBtn] = useState(false);
+    const navigate = useNavigate();
 
     const postsArray = posts?.posts || [];
 
@@ -50,7 +52,7 @@ const Posts = () => {
                             <div className='flex flex-col'>
                                 <div className='flex justify-between w-full'>
                                     <div className='flex gap-2'>
-                                        <figure className='w-10 h-10 rounded-full overflow-hidden cursor-pointer'>
+                                        <figure onClick={() => navigate(`/user/profile/${post?.userId}`)} className='w-10 h-10 rounded-full overflow-hidden cursor-pointer'>
                                             {post?.profile !== "null" || null
                                                 ? (
                                                     <img src={post?.profile} alt="profile" className='w-full h-full object-cover object-center' />

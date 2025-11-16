@@ -28,24 +28,24 @@ const UserProfilePage = () => {
         { credential: followers.length, credentialName: 'Followers' },
         { credential: following.length, credentialName: 'Following' },
     ]
-    const renderButton = () => {
-        if (userDetails?.users?._id === userId) {
-            return <div className='flex items-center justify-evenly w-full'>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Edit Profile</Button>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Share Profile</Button>
-            </div>;
-        } else if (followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true))) {
-            return <div className='flex items-center justify-evenly w-full'>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Following</Button>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Message</Button>
-            </div>;
-        } else {
-            return <div className='flex items-center justify-evenly w-full'>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Follow</Button>
-                <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Something</Button>
-            </div>;
-        }
-    };
+    // const renderButton = () => {
+    //     if (userDetails?.users?._id === userId) {
+    //         return <div className='flex items-center justify-evenly w-full'>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Edit Profile</Button>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Share Profile</Button>
+    //         </div>;
+    //     } else if (followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true))) {
+    //         return <div className='flex items-center justify-evenly w-full'>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Following</Button>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Message</Button>
+    //         </div>;
+    //     } else {
+    //         return <div className='flex items-center justify-evenly w-full'>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Follow</Button>
+    //             <Button className={`border bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>Something</Button>
+    //         </div>;
+    //     }
+    // };
 
     const { userId } = useParams();
 
@@ -70,7 +70,7 @@ const UserProfilePage = () => {
     </div>
 
     return (
-        <div className='mt-5 md:mr-5'>
+        <div className='mt-5 md:mr-5 w-full'>
             <div className='h-[700px] w-full overflow-y-auto no-scrollbar'>
             <FeedsCardWrapper >
                 <div className='w-full flex flex-col items-center'>
@@ -100,7 +100,7 @@ const UserProfilePage = () => {
                         </div>
                     </div>
 
-                    <div className="mt-5 w-full">{renderButton()}</div>
+                    {/* <div className="mt-5 w-full">{renderButton()}</div> */}
 
                     <UserPosts />
                 </div>
