@@ -18,8 +18,7 @@ const UserChats = () => {
 
     const userMessage = followers.filter((user) => user._id === messageId);
     const roomId = messageId;
-    console.log(roomId);
-    
+
 
     const [message, setMessage] = useState("");
     const senderId = userDetails?.users._id;
@@ -32,8 +31,8 @@ const UserChats = () => {
     }
 
     const [chat, setChat] = useState([]);
-    // console.log(chat);
-    
+    console.log(chat);
+
     const fetchMessage = async () => {
         await fetchMessageRequest(dispatch, setChat, roomId);
     }
@@ -41,7 +40,7 @@ const UserChats = () => {
     useEffect(() => {
         socket.emit("join_room", roomId);
         fetchMessage();
-    }, [roomId ]);
+    }, [roomId]);
 
 
     return (
@@ -64,6 +63,20 @@ const UserChats = () => {
                 <Button onClick={() => dispatch(setRightOutletBox('chatpage'))} className={`bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
                     <ChevronLeft className='size-7' />
                 </Button>
+            </div>
+
+            <div className='w-full h-full'>
+                {
+                    chat?.users?.senderId || chat?.users?.receiverId === roomId
+                        ? <div className='w-full h-full'>
+                            {
+                                chat?.messages.map((c , i) => (
+                                    <div key={i}>{c.message}</div>
+                                ))
+                            }
+                        </div>
+                        : ''
+                }
             </div>
 
             <div className='border rounded-full w-full flex items-center p-1'>
