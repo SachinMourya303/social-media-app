@@ -18,7 +18,7 @@ import toast from "react-hot-toast";
    export const fetchMessageRequest = async (dispatch , setChat , roomId ) => {
     dispatch(setFollowButtonLoading(true));
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URI}/message/chatroom`, {params: { roomId }});
+      const response = await axios(`${import.meta.env.VITE_API_URI}/message/chatroom`, {params: { roomId }});
       setChat(response.data);
     } catch (error) {
         toast.error(error.message);
