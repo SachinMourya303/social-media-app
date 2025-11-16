@@ -2,6 +2,7 @@ import { setRightOutletBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { Spinner } from '@/components/ui/spinner';
 import { socket } from '@/socket';
 import { fetchMessageRequest, sendMessageRequest } from '@/utils/sendMessage';
@@ -19,7 +20,7 @@ const UserChats = () => {
     const userMessage = followers.filter(user => user._id === messageId);
     const senderId = userDetails?.users._id;
     const receiverId = messageId;
-    const roomId = [senderId, receiverId].sort().join("_"); // FIXED roomId
+    const roomId = [senderId, receiverId].sort().join("_");
 
     const [message, setMessage] = useState("");
     const [chat, setChat] = useState([]);
@@ -27,7 +28,10 @@ const UserChats = () => {
     const fetchMessage = async () => await fetchMessageRequest(dispatch, setChat);
 
     const sendMessage = async () => {
-        socket.emit("send_message", { roomId, senderId, receiverId, message }); // REAL-TIME SEND
+        if (message === "") {
+            return;
+        }
+        socket.emit("send_message", { roomId, senderId, receiverId, message });
         await sendMessageRequest(dispatch, roomId, senderId, receiverId, message, setMessage);
         await fetchMessage();
     };
@@ -69,19 +73,21 @@ const UserChats = () => {
                 </Button>
             </div>
 
-            <div className="w-full h-full">
+            <ScrollArea className='h-70'>
+                <div className="w-full h-full">
                 {chat
                     .filter(c => c.users.senderId === messageId || c.users.receiverId === messageId)
                     .flatMap(c =>
                         [...c.messages]
-                            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp)) // SORT FIX
+                            .sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp))
                             .map((m, i) => (
                                 <div key={i} className={`mt-5 ${m.senderId === senderId ? 'text-end' : 'text-start'}`}>
-                                    <span className='bg-blue-200 p-2 rounded-lg'>{m.message}</span>
+                                    <span className={`bg-blue-200 p-2 rounded-lg normal-case ${m.senderId === senderId ? 'rounded-tr' : 'rounded-tl'}`}>{m.message}</span>
                                 </div>
                             ))
                     )}
             </div>
+            </ScrollArea>
 
             <div className='border rounded-full w-full flex items-center p-1'>
                 <Input onChange={e => setMessage(e.target.value)} value={message} className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
