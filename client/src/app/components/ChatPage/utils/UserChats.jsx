@@ -1,111 +1,85 @@
-import React, { useEffect, useState } from 'react';
-import { socket } from '@/socket';
-import axios from 'axios';
-import { useSelector, useDispatch } from 'react-redux';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { SendHorizonal, ChevronLeft } from 'lucide-react';
 import { setRightOutletBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { socket } from '@/socket';
+import { sendMessageRequest } from '@/utils/sendMessage';
+import { ChevronLeft, SendHorizonal } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 
 const UserChats = () => {
     const messageId = useSelector(state => state.popup.messageId);
-    const followers = useSelector(state => state.users.followers);
+    const followers = useSelector((state) => state.users.followers);
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
-    const loggedUser = useSelector(state => state.users.loggedUser);
 
     const dispatch = useDispatch();
 
-    const userMessage = followers.filter((u) => u._id === messageId)[0];
-    const roomId = [userDetails?._id, messageId].sort().join("_");
-
-    const [messages, setMessages] = useState([]);
-    const [currentMsg, setCurrentMsg] = useState("");
+    const userMessage = followers.filter((user) => user._id === messageId);
+    const roomId = messageId.slice(0, 5);
 
     useEffect(() => {
         socket.emit("join_room", roomId);
-    }, [roomId]);
 
-    useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URI}/messages/${roomId}`).then((res) => {
-            setMessages(res.data);
-        });
-    }, [roomId]);
-
-    useEffect(() => {
         socket.on("receive_message", (data) => {
-            setMessages((prev) => [...prev, data]);
+            // console.log("Received message:", data);
         });
-        return () => socket.off("receive_message");
-    }, []);
+
+        return () => {
+            socket.off("receive_message");
+        };
+    }, [roomId]);
+
+    const onHandleChnage = (e) => {
+      const { name , value } = e.target;
+      setMessage(prev => ({...prev , [name]:value}));
+    }
+    
+    const [message, setMessage] = useState({
+        roomId,
+        senderId: userDetails?.users._id,
+        receiverId: messageId,
+        message: ""
+    });
+
+    socket.emit("send_message", message); 
 
     const sendMessage = async () => {
-        if (!currentMsg.trim()) return;
+        await sendMessageRequest
+    }
 
-        const msgData = {
-            roomId,
-            senderId: loggedUser._id,
-            receiverId: messageId,
-            message: currentMsg
-        };
-
-        socket.emit("send_message", msgData);
-        setMessages((prev) => [...prev, msgData]);
-
-        await axios.post(`${import.meta.env.VITE_API_URI}/messages`, msgData);
-        setCurrentMsg("");
-    };
 
     return (
-        <div className="flex flex-col h-100 justify-between">
+        <div className='w-full h-100 flex flex-col justify-between'>
+            <div className={`flex w-full justify-between items-center border-b pb-2 ${darkmode ? 'border-darkmode-text/50' : 'border-gray-200'}`}>
+                <div className='flex gap-2 items-center'>
+                    <figure className='w-12 h-12 rounded-full overflow-hidden'>
+                        {userMessage[0]?.profile !== null
+                            ? (
+                                <img src={userMessage[0]?.profile} alt="profile" className='w-full h-full object-cover object-center' />
+                            )
+                            : (
+                                <img src={websiteLogo.dummyUserIcon} alt="profile" className='w-full h-full object-cover object-center' />
+                            )
+                        }
+                    </figure>
 
-            <div className="flex items-center justify-between border-b pb-2">
-                <div className="flex items-center gap-4">
-                    <img
-                        src={userMessage?.profile || websiteLogo.dummyUserIcon}
-                        className="w-12 h-12 rounded-full object-cover"
-                    />
-                    <strong>{userMessage?.username}</strong>
+                    <figcaption className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{userMessage[0]?.username}</figcaption>
                 </div>
-                <Button onClick={() => dispatch(setRightOutletBox('chatpage'))}>
-                    <ChevronLeft className="size-7" />
+                <Button onClick={() => dispatch(setRightOutletBox('chatpage'))} className={`bg-transparent hover:bg-transparent cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>
+                    <ChevronLeft className='size-7' />
                 </Button>
             </div>
 
-            <div className="w-full h-full">
-                {messages?.map((msg, i) => (
-                    <div key={i}>
-                        <div>
-                            {msg.senderId === loggedUser._id &&
-                                <div className='w-full flex justify-end mt-2'>
-                                    <span className='bg-blue-200 rounded-tr rounded-lg py-2 px-5'>{msg.message}</span>
-                                </div>
-                            }
-                        </div>
-                         <div>
-                            {msg.senderId !== loggedUser._id &&
-                                <div className='w-full flex justify-start mt-2'>
-                                    <span className='bg-blue-200 rounded-tl rounded-lg py-2 px-5'>{msg.message}</span>
-                                </div>
-                            }
-                        </div>
-                    </div>
-                ))}
-            </div>
-
-            <div className="flex items-center gap-2 p-2 border-t">
-                <Input
-                    value={currentMsg}
-                    onChange={(e) => setCurrentMsg(e.target.value)}
-                    placeholder="Type a message..."
-                    className="flex-1"
-                />
-                <Button onClick={sendMessage}>
+            <div className='border rounded-full w-full flex items-center p-1'>
+                <Input onChange={onHandleChnage} value={message.message} name='message' className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
+                <Button onClick={sendMessage} className='rounded-full'>
                     <SendHorizonal />
                 </Button>
             </div>
-        </div>
-    );
-};
 
-export default UserChats;
+        </div>
+    )
+}
+
+export default UserChats
