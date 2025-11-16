@@ -2,6 +2,7 @@ import { setRightOutletBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Spinner } from '@/components/ui/spinner';
 import { socket } from '@/socket';
 import { sendMessageRequest } from '@/utils/sendMessage';
 import { ChevronLeft, SendHorizonal } from 'lucide-react';
@@ -12,11 +13,11 @@ const UserChats = () => {
     const messageId = useSelector(state => state.popup.messageId);
     const followers = useSelector((state) => state.users.followers);
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
-
+    const followButtonLoading = useSelector(state => state.users.followButtonLoading);
     const dispatch = useDispatch();
 
     const userMessage = followers.filter((user) => user._id === messageId);
-    const roomId = messageId.slice(0, 5);
+    const roomId = messageId;
 
     useEffect(() => {
         socket.emit("join_room", roomId);
@@ -30,22 +31,14 @@ const UserChats = () => {
         };
     }, [roomId]);
 
-    const onHandleChnage = (e) => {
-      const { name , value } = e.target;
-      setMessage(prev => ({...prev , [name]:value}));
-    }
-    
-    const [message, setMessage] = useState({
-        roomId,
-        senderId: userDetails?.users._id,
-        receiverId: messageId,
-        message: ""
-    });
+    const [message, setMessage] = useState("");
+    const senderId = userDetails?.users._id;
+    const receiverId = messageId;
 
-    socket.emit("send_message", message); 
+    socket.emit("send_message", message);
 
     const sendMessage = async () => {
-        await sendMessageRequest
+        await sendMessageRequest(dispatch, roomId, senderId, receiverId, message , setMessage);
     }
 
 
@@ -72,9 +65,9 @@ const UserChats = () => {
             </div>
 
             <div className='border rounded-full w-full flex items-center p-1'>
-                <Input onChange={onHandleChnage} value={message.message} name='message' className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
-                <Button onClick={sendMessage} className='rounded-full'>
-                    <SendHorizonal />
+                <Input onChange={(e) => setMessage(e.target.value)} value={message} className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
+                <Button onClick={sendMessage} className='rounded-full cursor-pointer'>
+                    {followButtonLoading ? <Spinner /> : <SendHorizonal />}
                 </Button>
             </div>
 
