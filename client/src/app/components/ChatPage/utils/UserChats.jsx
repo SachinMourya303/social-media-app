@@ -2,17 +2,52 @@ import { setRightOutletBox } from '@/app/stateManagement/slice/popupSlice';
 import { websiteLogo } from '@/assets/assets';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { socket } from '@/socket';
+import { sendMessageRequest } from '@/utils/sendMessage';
 import { ChevronLeft, SendHorizonal } from 'lucide-react';
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 const UserChats = () => {
     const messageId = useSelector(state => state.popup.messageId);
     const followers = useSelector((state) => state.users.followers);
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
+
     const dispatch = useDispatch();
 
     const userMessage = followers.filter((user) => user._id === messageId);
+    const roomId = messageId.slice(0, 5);
+
+    useEffect(() => {
+        socket.emit("join_room", roomId);
+
+        socket.on("receive_message", (data) => {
+            // console.log("Received message:", data);
+        });
+
+        return () => {
+            socket.off("receive_message");
+        };
+    }, [roomId]);
+
+    const onHandleChnage = (e) => {
+      const { name , value } = e.target;
+      setMessage(prev => ({...prev , [name]:value}));
+    }
+    
+    const [message, setMessage] = useState({
+        roomId,
+        senderId: userDetails?.users._id,
+        receiverId: messageId,
+        message: ""
+    });
+
+    socket.emit("send_message", message); 
+
+    const sendMessage = async () => {
+        await sendMessageRequest
+    }
+
 
     return (
         <div className='w-full h-100 flex flex-col justify-between'>
@@ -37,8 +72,8 @@ const UserChats = () => {
             </div>
 
             <div className='border rounded-full w-full flex items-center p-1'>
-                <Input className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi'/>
-                <Button className='rounded-full'>
+                <Input onChange={onHandleChnage} value={message.message} name='message' className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
+                <Button onClick={sendMessage} className='rounded-full'>
                     <SendHorizonal />
                 </Button>
             </div>
