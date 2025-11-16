@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Spinner } from '@/components/ui/spinner';
 import { socket } from '@/socket';
-import { sendMessageRequest } from '@/utils/sendMessage';
+import { fetchMessageRequest, sendMessageRequest } from '@/utils/sendMessage';
 import { ChevronLeft, SendHorizonal } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,18 +18,8 @@ const UserChats = () => {
 
     const userMessage = followers.filter((user) => user._id === messageId);
     const roomId = messageId;
-
-    useEffect(() => {
-        socket.emit("join_room", roomId);
-
-        socket.on("receive_message", (data) => {
-            // console.log("Received message:", data);
-        });
-
-        return () => {
-            socket.off("receive_message");
-        };
-    }, [roomId]);
+    console.log(roomId);
+    
 
     const [message, setMessage] = useState("");
     const senderId = userDetails?.users._id;
@@ -38,8 +28,20 @@ const UserChats = () => {
     socket.emit("send_message", message);
 
     const sendMessage = async () => {
-        await sendMessageRequest(dispatch, roomId, senderId, receiverId, message , setMessage);
+        await sendMessageRequest(dispatch, roomId, senderId, receiverId, message, setMessage);
     }
+
+    const [chat, setChat] = useState([]);
+    // console.log(chat);
+    
+    const fetchMessage = async () => {
+        await fetchMessageRequest(dispatch, setChat, roomId);
+    }
+
+    useEffect(() => {
+        socket.emit("join_room", roomId);
+        fetchMessage();
+    }, [roomId ]);
 
 
     return (
