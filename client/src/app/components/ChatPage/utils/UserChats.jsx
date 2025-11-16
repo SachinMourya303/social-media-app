@@ -19,7 +19,6 @@ const UserChats = () => {
     const userMessage = followers.filter((user) => user._id === messageId);
     const roomId = messageId;
 
-
     const [message, setMessage] = useState("");
     const senderId = userDetails?.users._id;
     const receiverId = messageId;
@@ -28,13 +27,13 @@ const UserChats = () => {
 
     const sendMessage = async () => {
         await sendMessageRequest(dispatch, roomId, senderId, receiverId, message, setMessage);
+        await fetchMessage();
     }
 
     const [chat, setChat] = useState([]);
-    console.log(chat);
 
     const fetchMessage = async () => {
-        await fetchMessageRequest(dispatch, setChat, roomId);
+        await fetchMessageRequest(dispatch, setChat);
     }
 
     useEffect(() => {
@@ -65,19 +64,22 @@ const UserChats = () => {
                 </Button>
             </div>
 
-            <div className='w-full h-full'>
+            <div className="w-full h-full">
                 {
-                    chat?.users?.senderId || chat?.users?.receiverId === roomId
-                        ? <div className='w-full h-full'>
-                            {
-                                chat?.messages.map((c , i) => (
-                                    <div key={i}>{c.message}</div>
-                                ))
-                            }
-                        </div>
-                        : ''
+                    chat
+                        .filter((c) =>
+                            c?.users?.senderId === messageId ||
+                            c?.users?.receiverId === messageId)
+                        .flatMap((c) =>
+                            c.messages.map((m, i) => (
+                                <div key={i} className={`mt-5 ${c?.users?.senderId === messageId ? 'text-start' : 'text-end'}`}>
+                                    <span className='bg-blue-200 p-2 rounded-lg'>{m.message}</span>
+                                </div>
+                            ))
+                        )
                 }
             </div>
+
 
             <div className='border rounded-full w-full flex items-center p-1'>
                 <Input onChange={(e) => setMessage(e.target.value)} value={message} className='outline-none border-0 shadow-none ring-0!' placeholder='Say hi' />
