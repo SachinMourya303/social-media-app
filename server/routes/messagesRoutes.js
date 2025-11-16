@@ -31,4 +31,19 @@ messageRoutes.post("/send", async (req, res) => {
     }
 });
 
+messageRoutes.get('/chatroom' , async (req , res) => {
+    try {
+        const { roomId } = req.body;
+
+        if(!roomId){
+            return res.status(404).json({ message: "Enter room id first!" });
+        }
+
+        const roomFound = await ChatRoomModel.findOne({ roomId });
+        return res.status(200).json(roomFound);
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
+})
+
 export default messageRoutes;
