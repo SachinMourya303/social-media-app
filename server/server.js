@@ -41,7 +41,7 @@ io.on('connection', (socket) => {
 app.use('/auth', authRoutes);
 app.use('/users', userDetailsRoutes);
 app.use('/post', postsRoutes);
-app.use('/messages', messagesRoutes);
+app.use('/message', messagesRoutes);
 
 const PORT = process.env.PORT || 3000;
 

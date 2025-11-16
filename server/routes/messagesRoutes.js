@@ -1,19 +1,34 @@
 import express from "express";
-import Message from "../models/messagesModel.js";
+import ChatRoomModel from "../models/messagesModel.js";
 
-const router = express.Router();
+const messageRoutes = express.Router();
 
-// get all messages for a room
-router.get("/:roomId", async (req, res) => {
-    const { roomId } = req.params;
-    const messages = await Message.find({ roomId }).sort({ createdAt: 1 });
-    res.json(messages);
+messageRoutes.post("/send", async (req, res) => {
+    try {
+        const { roomId, senderId, receiverId, message } = req.body;
+
+        if (!roomId || !senderId || !receiverId || !message) {
+            return res.status(400).json({ message: "Missing required fields" });
+        }
+
+        let room = await ChatRoomModel.findOne({ roomId });
+
+        if (!room) {
+            room = await ChatRoomModel.create({
+                roomId,
+                users: { senderId, receiverId },
+                messages: [{ senderId, message }]
+            });
+        } else {
+            room.messages.push({ senderId, message });
+            await room.save();
+        }
+
+        return res.status(200).json({ success: true, room });
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 });
 
-// save a message
-router.post("/", async (req, res) => {
-    const msg = await Message.create(req.body);
-    res.json(msg);
-});
-
-export default router;
+export default messageRoutes;
