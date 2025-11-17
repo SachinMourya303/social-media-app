@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { BiSolidBrightnessHalf } from "react-icons/bi";
-import { Bell, ChevronDown, CircleFadingPlus, CircleUser, Home, LogOutIcon, Menu, MessageCircleMore, Moon, PlusCircle, Search, SearchIcon, Sun, X, } from 'lucide-react'
+import { Bell, ChevronDown, CircleFadingPlus, CircleUser, Home, LogOutIcon, Menu, MessageCircleMore, Moon, PlusCircle, Search, SearchIcon, Sun, User, X, } from 'lucide-react'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { logOut, setDarkMode } from '../stateManagement/slice/authSlice';
@@ -8,6 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from 'primereact/skeleton';
 import { setActivePage, setPostDialogBox, setRightOutletBox, setSearchDialogBox } from '../stateManagement/slice/popupSlice';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 
 
@@ -26,7 +27,8 @@ const Navbar = () => {
     { title: 'Create', clickFunction: () => { navigate('/'); setMenu(false); setActive('Create'); dispatch(setPostDialogBox(true)) }, icon: <CircleFadingPlus className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Theme', clickFunction: () => { dispatch(setDarkMode(true)); setMenu(false); setActive('Theme') }, icon: <BiSolidBrightnessHalf className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
     { title: 'Message', clickFunction: () => { navigate('/'); setMenu(false); setActive('Message'); dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('chatpage')) }, icon: <MessageCircleMore className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
-    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification'); dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('notification')); }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
+    { title: 'Notification', clickFunction: () => { navigate('/'); setMenu(false); setActive('Notification'); dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('notification')); }, icon: <Bell className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
+    { title: 'Profile', clickFunction: () => { navigate('/'); setMenu(false); navigate(`/user/profile/${userDetails?.users?._id}`) }, icon: <User className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> }
   ]
 
   const isLoading = useSelector(state => state.users.isLoading);
@@ -127,7 +129,7 @@ const Navbar = () => {
       {menu
         ? (
           <div className='flex md:hidden'>
-            <div className={`absolute z-10 p-5 top-0 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} w-[75%] h-screen shadow-lg transition-all`}>
+            <div className={`absolute z-10 p-5 top-0 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} w-full h-screen shadow-lg transition-all`}>
 
               <div onClick={() => setMenu(!menu)} className='flex justify-end items-center'><X /></div>
 
@@ -160,15 +162,17 @@ const Navbar = () => {
 
               <hr />
 
-              <div className='mt-10'>
-                {
-                  menuList.map((menu, index) => (
-                    <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
-                      <div >{menu.icon}</div>
-                      <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
-                    </div>
-                  ))
-                }
+              <div className='mt-5'>
+                <ScrollArea className='h-100'>
+                  {
+                    menuList.map((menu, index) => (
+                      <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
+                        <div >{menu.icon}</div>
+                        <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
+                      </div>
+                    ))
+                  }
+                </ScrollArea>
               </div>
 
 
