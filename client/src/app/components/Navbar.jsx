@@ -20,6 +20,7 @@ const Navbar = () => {
 
   const [menu, setMenu] = useState(false);
   const [active, setActive] = useState('Home');
+  const [logProBtn, setLogProBtn] = useState(false);
 
   const menuList = [
     { title: 'Home', clickFunction: () => { navigate('/'); setMenu(false); setActive('Home'); dispatch(setActivePage('')); }, icon: <Home className={`size-7 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`} /> },
@@ -84,11 +85,11 @@ const Navbar = () => {
             <figure>
               {userDetails?.users?.profile !== null
                 ? (
-                  <div onClick={() => dispatch(logOut())}>
+                  <div onClick={() => setLogProBtn(!logProBtn)}>
                     {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 object-cover object-center rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
                   </div>
                 )
-                : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
+                : (<CircleUser onClick={() => setLogProBtn(!logProBtn)} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
               }
             </figure>
 
@@ -102,17 +103,59 @@ const Navbar = () => {
                 )
               }
             </figcaption>
+
+            <div className='relative'>
+              {logProBtn &&
+                <div className={`absolute z-10 flex flex-col top-5 right-0 ${darkmode ? 'bg-darkmode-theme' : 'bg-white'} shadow-[0px_0px_5px_1px_lightgray] rounded-lg overflow-hidden`}>
+                  <div className={`flex justify-between w-60 p-2 ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'}`}>
+                    <figure className='flex items-center gap-2'>
+                      {userDetails?.users?.profile !== null
+                        ? (
+                          <div>
+                            {<img src={userDetails?.users?.profile} alt="profile" className='w-8 h-8 object-cover object-center rounded-full hover:ring-4 hover:ring-app-theme cursor-pointer' />}
+                          </div>
+                        )
+                        : (<CircleUser className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
+                      }
+
+                      <figcaption>
+                        {userDetails?.users?.username !== ""
+                          ? (
+                            <span className={`text-xl ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>{userDetails?.users?.username}</span>
+                          )
+                          : (
+                            <span>No User found</span>
+                          )
+                        }
+                      </figcaption>
+                    </figure>
+
+                    <div onClick={() => setLogProBtn(!logProBtn)} className='flex items-center cursor-pointer'><X className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} /></div>
+                  </div>
+                  <div className={`p-2 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`}>{userDetails?.users?.email}</div>
+                  <hr />
+                  <div className='flex justify-evenly'>
+                    <Button onClick={() => {navigate(`/user/profile/${userDetails?.users?._id}`); setLogProBtn(!logProBtn)}} className={`flex border-r w-[50%] gap-2 bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>
+                      <span>Profile</span>
+                    </Button>
+                    <Button onClick={() => {dispatch(logOut()); setLogProBtn(!logProBtn)}} className={`flex gap-2 w-[50%] bg-transparent ${darkmode ? 'text-darkmode-text hover:bg-darkmode-element' : 'text-gray-700 hover:bg-gray-100'} rounded-none cursor-pointer`}>
+                      <span>Logout</span>
+                    </Button>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
 
           <div className='flex md:hidden items-center gap-3'>
             <div className='flex items-center w-full justify-end gap-3'>
               <div className='relative'>
-                <MessageCircleMore className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <MessageCircleMore onClick={() => { dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('chatpage')) }} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
                 <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>0</span>
               </div>
 
               <div className='relative'>
-                <Bell className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
+                <Bell onClick={() => { dispatch(setActivePage('rightOutlet')); dispatch(setRightOutletBox('notification')) }} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />
                 <span className='flex items-center justify-center absolute top-[-8px] right-[-7px] bg-app-theme text-white rounded-full w-4 h-4 text-xs'>{notification.length}</span>
               </div>
             </div>
@@ -137,11 +180,11 @@ const Navbar = () => {
                 <figure>
                   {userDetails?.users?.profile !== null
                     ? (
-                      <div onClick={() => dispatch(logOut())}>
+                      <div onClick={() => {navigate(`/user/profile/${userDetails?.users?._id}`);  setMenu(!menu)}}>
                         {<img src={userDetails?.users?.profile} alt="profile" className='w-15 h-15 object-cover object-center rounded-lg hover:ring-4 hover:ring-app-theme cursor-pointer' />}
                       </div>
                     )
-                    : (<CircleUser onClick={() => dispatch(logOut())} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
+                    : (<CircleUser onClick={() => {navigate(`/user/profile/${userDetails?.users?._id}`);  setMenu(!menu)}} className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} hover:text-app-theme cursor-pointer`} />)
                   }
                 </figure>
 
@@ -163,14 +206,14 @@ const Navbar = () => {
               <hr />
 
               <div className='mt-5'>
-                  {
-                    menuList.map((menu, index) => (
-                      <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
-                        <div >{menu.icon}</div>
-                        <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
-                      </div>
-                    ))
-                  }
+                {
+                  menuList.map((menu, index) => (
+                    <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
+                      <div >{menu.icon}</div>
+                      <div className={`${darkmode ? 'text-darkmode-text' : 'text-gray-500'} group-hover:text-app-theme`}>{menu.title}</div>
+                    </div>
+                  ))
+                }
               </div>
 
 

@@ -78,18 +78,18 @@ const UserProfilePage = () => {
                         <ChevronLeft onClick={() => navigate('/')} className={`cursor-pointer ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`} />
                     </div>
                     <div className='flex justify-evenly items-center w-full'>
-                        <figure className='w-30 h-30 md:w-50 md:h-50 rounded-full overflow-hidden'>
+                        <figure className='w-20 h-20 md:w-40 md:h-40 rounded-full overflow-hidden'>
                             {findUser?.profile !== null
                                 ? <img src={findUser?.profile} alt="story" className='w-full h-full object-cover object-center' />
                                 : <img src={websiteLogo.dummyUserIcon} alt="" />
                             }
                         </figure>
-                        <div className='flex flex-col gap-3'>
-                            <figcaption className={`font-bold text-xl ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{findUser?.username.toUpperCase()}</figcaption>
+                        <div className='flex justify-start flex-col gap-3'>
+                            <figcaption className={`font-bold text-xl capitalize ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{findUser?.username}</figcaption>
 
                             <div className='flex justify-between w-full gap-3'>
                                 {userCredentails.map((credentials, index) => (
-                                    <div key={index} className='flex flex-col items-center justify-center w-full'>
+                                    <div key={index} className='flex flex-col justify-center w-full'>
                                         <span className={`${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{credentials.credential}</span>
                                         <span className={`text-xs ${darkmode ? 'text-darkmode-text' : 'text-gray-700'}`}>{credentials.credentialName}</span>
                                     </div>
