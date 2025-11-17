@@ -70,7 +70,7 @@ const UserProfilePage = () => {
     </div>
 
     return (
-        <div className='mt-5 md:mr-5 w-full'>
+        <div className='mt-5 md:mr-5'>
             <div className='h-[700px] w-full overflow-y-auto no-scrollbar'>
             <FeedsCardWrapper >
                 <div className='w-full flex flex-col items-center'>
