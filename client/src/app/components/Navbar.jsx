@@ -163,7 +163,6 @@ const Navbar = () => {
               <hr />
 
               <div className='mt-5'>
-                <ScrollArea className='h-100'>
                   {
                     menuList.map((menu, index) => (
                       <div onClick={menu.clickFunction} key={index} className={`flex items-center gap-2 group p-3 mt-5 ${active === menu.title ? 'bg-app-theme/20' : ''} hover:bg-app-theme/20 rounded-lg cursor-pointer transition-all`}>
@@ -172,7 +171,6 @@ const Navbar = () => {
                       </div>
                     ))
                   }
-                </ScrollArea>
               </div>
 
 
