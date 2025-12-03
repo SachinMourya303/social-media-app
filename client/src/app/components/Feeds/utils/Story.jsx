@@ -65,7 +65,7 @@ const Story = () => {
               </div>
 
               <div className='flex items-center justify-center gap-2'>
-                {followers.filter((user) => user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true)).map((user, index) => (
+                {followers.filter((user) => user?.followers?.some(f => f?.userId === loggedUser?._id && f?.connection === true)).map((user, index) => (
                   <div onClick={() => navigate(`/stories/${user?._id}`)} key={index} className={`${user?.storyFile?.url !== null ? 'flex' : 'hidden'} flex-col w-15 items-center justify-center gap-2`}>
 
                     <figure className='w-15 h-15 rounded-full overflow-hidden cursor-pointer'>
