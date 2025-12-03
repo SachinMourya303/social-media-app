@@ -15,7 +15,7 @@ const RightOutlet = () => {
   const dispatch = useDispatch();
 
    useEffect(() => {
-    const filterFollowers = followers.filter((user) => !user?.followers?.some(f => f.userId === loggedUser._id && f.connection === true));    
+    const filterFollowers = followers.filter((user) => !user?.followers?.some(f => f?.userId === loggedUser?._id && f?.connection === true));    
     dispatch(setNotification(filterFollowers));
   }, [followers]);
 

@@ -53,7 +53,7 @@ const Navbar = () => {
       <div className={darkmode ? 'bg-darkmode-theme' : 'bg-white'}>
         {/* Desktop view */}
         <div className='grid grid-cols-[0.5fr_1fr] md:grid-cols-[0.5fr_1fr_1fr_1fr_0fr] items-center px-5 py-3'>
-          <strong id='website-name' className={darkmode ? 'text-app-theme text-2xl' : 'text-2xl'}>TwitBook</strong>
+          <strong id='website-name' className={darkmode ? 'text-app-theme text-2xl select-none' : 'text-2xl select-none'}>TwitBook</strong>
 
           <div onClick={() => dispatch(setSearchDialogBox(true))} className={`hidden md:flex gap-2 items-center cursor-text px-2 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] ${darkmode ? 'bg-darkmode-element' : 'bg-gray-100'} rounded-full w-[80%]`}>
             <Search className={`size-5 ${darkmode ? 'text-darkmode-text' : 'text-gray-500'}`} />
