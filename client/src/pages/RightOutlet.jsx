@@ -17,7 +17,7 @@ const RightOutlet = () => {
    useEffect(() => {
     const filterFollowers = followers.filter((user) => !user?.followers?.some(f => f?.userId === loggedUser?._id && f?.connection === true));    
     dispatch(setNotification(filterFollowers));
-  }, [followers]);
+  }, [followers , isLoading]);
 
   if (isLoading) return <div className="gap-5 m-5">
     <ul className="m-0 p-0 list-none">

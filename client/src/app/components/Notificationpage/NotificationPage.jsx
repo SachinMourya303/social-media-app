@@ -10,15 +10,15 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const NotificationPage = () => {
     const loggedUser = useSelector(state => state.users.loggedUser);
-    const notification = useSelector(state => state.users.notification);
+    const notification = useSelector(state => state.users.notification);    
     const { userDetails, darkmode } = useSelector(state => state.userAuth);
     const followButtonLoading = useSelector(state => state.users.followButtonLoading);
     const dispatch = useDispatch();
 
     const followBackService = async (receiver_Id) => {
-        await acceptFollowRequest(dispatch, loggedUser._id, receiver_Id);
+        await acceptFollowRequest(dispatch, loggedUser?._id, receiver_Id);
 
-        const updated = notification.filter(user => user._id !== receiver_Id);
+        const updated = notification.filter(user => user?._id !== receiver_Id);
 
         dispatch(setNotification(updated));
     };
@@ -35,7 +35,7 @@ const NotificationPage = () => {
             {
                 notification.length > 0 ? (
                     <div>
-                        {notification.map((tofollow) => (
+                        {notification?.map((tofollow) => (
                             <div key={tofollow._id} className='my-3'>
                                 <div className='flex justify-between items-center'>
                                     <div className='flex gap-2 justify-center items-center'>
