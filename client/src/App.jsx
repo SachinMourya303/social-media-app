@@ -66,10 +66,10 @@ const App = () => {
     <>
       <Toaster />
       <Routes>
-        <Route path="/login" element={userToken === '' ? <Auth /> : <Navigate to="/user-details" />} />
-        <Route path="/user-details" element={userDetails === '' ? <UserDetails /> : <Navigate to="/" />} />
+        <Route path="/login" element={userToken === '' || null ? <Auth /> : <Navigate to="/user-details" />} />
+        <Route path="/user-details" element={userDetails === '' || null ? <UserDetails /> : <Navigate to="/" />} />
 
-        <Route path="/" element={userDetails === '' ? <Navigate to="/login" /> : <Layout />}>
+        <Route path="/" element={userDetails === '' || null ? <Navigate to="/login" /> : <Layout />}>
           <Route index element={<FeedsPage />} />
           <Route path='user/profile/:userId' element={<UserProfilePage />} />
         </Route>

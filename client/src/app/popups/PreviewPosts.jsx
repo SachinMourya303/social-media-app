@@ -16,13 +16,13 @@ const PreviewPosts = () => {
     const dispatch = useDispatch();
     const postId = previewPostBox;
 
-    const findPost = posts.posts.find((user) => user._id === postId);
+    const findPost = posts.posts.find((user) => user?._id === postId);
 
     const [comment, setComment] = useState("");
 
-    const userId = loggedUser._id;
-    const profile = loggedUser.profile;
-    const username = loggedUser.username;
+    const userId = loggedUser?._id;
+    const profile = loggedUser?.profile;
+    const username = loggedUser?.username;
     const commentService = async () => {
         await sendCommentRequest(dispatch, setComment, postId, userId, profile, username, comment);
     }
